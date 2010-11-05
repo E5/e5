@@ -6,7 +6,7 @@
  */
 
 // Example synthdef
-SynthDef(\sample, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_trig=1, rate=1.0, length= 1.0, panPos=0|
+SynthDef(\terminal_sample, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_trig=1, rate=1.0, length= 1.0, panPos=0|
 	var signal, env, c_gain=1, c_threshhold=1.0;
 
 	signal= PlayBuf.ar(
