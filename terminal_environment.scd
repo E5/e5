@@ -12,19 +12,23 @@
 
 // Evaluate other files
 [	"terminal_functions.scd",
-	"terminal_blackbox_synths.scd",
-//	"terminal_blackbox_data.scd",
+	"terminal_synths.scd",
+	"terminal_data.scd",
 ].do(_.loadRelative);
 
 //"terminal_functions.scd".loadRelative;
 //"terminal_blackbox_synths.scd".loadRelative;
 //"terminal_blackbox_data.scd".loadRelative;
 )
+
+/******************************************************************************/
+
 // arrange windows
 ~f_placeWindow.value(Document.listener, Document.current);
 
-(
+/******************************************************************************/
 
+(
 var dec;
 
 // inspector window
@@ -35,13 +39,14 @@ dec= w.addFlowLayout;
 g = EZSmoothSlider(w,
 	390@20,
 	"bpm".padR,
-	[100, 200, \lin, 1],
+	[10, 500, \lin, 1],
 	{|me|
+		~data.global.bpm= me.value;
 		(me.value.asString ++ "bpm".padL).postln;
 	}
 );
 g.setColors(Color.grey,Color.white);
-g.value_(140);
+g.value_(~data.global.bpm);
 
 // Play
 SmoothButton(w, 100@40)

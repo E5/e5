@@ -39,7 +39,21 @@ SynthDef(\tml_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_tr
 	signal= EnvGen.kr(Env.cutoff(1, 1), 0, amp, 0, BufDur.kr(bufnum) * length) * signal;
 
 	Out.ar(out, signal);
-}).add;
+}, metadata: (
+	specs: (
+		out: [0, 7, 'lin', 1, 0, ""],
+		bufnum: [0, 1000, 'lin', 1, 0, ""],
+		amp: [0, 1, 'amp', 0, 0, ""],
+		startPos: [0, 1, 'lin', 0, 0, ""],
+		loop: [0, 1, \lin, 1, 0, ""],
+		t_trig: [0, 1, \lin, 1, 0, ""],
+		rate: \rate.asSpec,
+		length: [0, 1, 'lin', 0, 0, ""],
+		panPos: \pan.asSpec,
+		cmp_gain: [0, 100, \lin, 0, 1, ""],
+		cmp_threshhold: [0, 1, 'amp', 0, 0, ""]
+	))
+).add;
 
 
 // Cylob's Electribe drum synth
@@ -219,8 +233,8 @@ SynthDef(\tml_gen_SOStom,
 		freq: [20, 20000, 'exp', 0, 440, " Hz"],
 		drum_timbre: [0, 1, 'amp', 0, 0, ""],
 		amp: [0, 1, 'amp', 0, 0, ""]
-	)
-)).add;
+	))
+).add;
 
 /**
  *
@@ -272,4 +286,9 @@ SynthDef(\tml_mod_compressor, {
 	b.free;
 	a.set(\gate, 0);	
 */
+
+"Synths loaded...".postln;
+//~data.postln;
+""
+
 )
