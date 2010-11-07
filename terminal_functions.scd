@@ -6,6 +6,8 @@
  *
  */
 
+/******************************************************************************/
+
 ~f_placeWindow= {|listener, current, inspector|
 	// this function resizes and positions
 	// the default terminal windows
@@ -26,8 +28,11 @@
 	});
 };
 
+/******************************************************************************/
+
 ~f_beatboxRow= {|view, seq, states|
 	// this function draws a drum machine row
+	// Will most likely become a Class, later.
 	var layout, triggers;
 	states = states ? [0, 1];
 	seq = seq ? (Array.fill(16, {states.choose}));
@@ -66,6 +71,50 @@
 		};
 		seq
 };
+
+//~f_knobRow= {|view, seq, spec|
+//	// this function draws a row of knobs
+//	// Will most likely become a Class, later.
+//	var layout, knobs;
+//	states = states ? [0, 1];
+//	seq = seq ? (Array.fill(16, {states.choose}));
+//
+//	knobs= Array.fill(seq.size);
+//
+//	layout= CompositeView(view,
+//		(view.bounds.width-8) @ 40
+//	)/*.background_(Color.rand)*/;
+//
+//	layout.addFlowLayout(0@0);
+//
+//	seq.size.do{|i|
+//		var x;
+//		triggers[i]= SmoothButton.new(layout, 32 @ 32)
+//			.radius_(10)
+//			.canFocus_(false)
+//			.border_(3)
+//			.action_{|me|
+//					seq[i]= me.value;
+//					seq.postln;
+//				}
+//			.value_(seq[i]);
+//		if (i%4 == 0, {
+//			triggers[i].states_([
+//				[\none, Color.grey(0.1), Color.grey(0.85).alpha_(0.25)],
+//				[\record, Color.grey(0.1), Color.grey(0.85).alpha_(0.25)],
+//			])
+//			},{
+//			triggers[i].states_([
+//				[\none, Color.grey(0.1), Color.white.alpha_(0.4)],
+//				[\record, Color.grey(0.1), Color.white.alpha_(0.4)],
+//			])
+//			});
+//		
+//		};
+//		seq
+//};
+
+/******************************************************************************/
 
 "Functions loaded...".postln;
 "\t~f_placeWindow".postln;
