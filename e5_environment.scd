@@ -88,11 +88,17 @@ guiCreatePart= SmoothButton(w, 100@20)
 		SCRequestString( "part name", "enter the name of the new part",
 			{|str|
 				~f_createPart.value(str);
-				~data.postln;
-//				("your name is " ++ str).postln;
-			});
-
-//		~f_placeWindow.value(Document.listener, Document.current, w);
+//				~data.postln;
+				// empty the items list
+				guiPart.items=[];
+				// fill it with all the part names
+				~data.keys.reject{|key| key== \global; }.asArray.sort.do{|item, i|
+					guiPart.addItem(item, {item. postln});
+				};
+//				guiPart.items.size.postln;
+			}/*.defer*/);
+//			guiPart.value_(guiPart.items.size);
+			guiPart.items.postln;
 	})
 	.canFocus_(false)
 	.border_(1)
@@ -118,10 +124,14 @@ c= CompositeView.new(w, w.view.bounds.width-8@(w.view.bounds.height-42))
 c.addFlowLayout;
 
 guiPart= EZPopUpMenu.new(c, 190@20, "part : ");
-[	"kick1", "kick2", "snare1", "snare2", "hh", "perc",
-	"bass_main", "-", "new..." ].do{|item, i|
+~data.keys.reject{|key| key== \global; }.asArray.do{|item, i|
 	guiPart.addItem(item, {item. postln});
 };
+
+if (guiPart.items[0].isNil, {guiPart.addItem("no parts", {})});
+//guiPart.items[0].postln;
+//guiPart.addItem("no parts", {});
+
 guiPart.setColors(
 	Color.black.alpha_(0.25), Color.grey(0.95),
 	Color.black.alpha_(0.25), Color.black);
@@ -202,6 +212,9 @@ SmoothButton(guiComp[0], 35@20)
 
 // create a part
 ~f_createPart.value("kick1");
+~data.keys.reject{|key| key== \global; }.asArray.do{|item, i|
+	guiPart.addItem(item, {item. postln});
+};
 //~data.kick1= ();
 //~data.kick1.player= ();
 //~data.kick1.gen= ();
@@ -225,3 +238,8 @@ v=CompositeView.new(w,w.view.bounds.insetBy(10)).background_(Color.rand);
 		.autogui(window:v, step:30/*, vOff: height*(i%6), hOff:250*((i/6)).asInteger*/);
 )
 v.visible_(true)
+
+c= ~data.keys.reject{|key|
+	key== \global;
+}.asArray;
+c
