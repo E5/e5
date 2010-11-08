@@ -30,6 +30,8 @@
 var	dec, guiComp, guiBpm, guiKey, guiScale, guiPlay, guiPart, guiGen,
 	guiWidget, guiGrid, guiCreatePart;
 
+var tmp; // for utility
+
 // inspector window
 w= Window.new("", Rect(0, 300, 810, 560), false/*, false*/).front;
 
@@ -66,6 +68,44 @@ guiScale.setColors(
 	Color.black.alpha_(0.25), Color.grey(0.95),
 	Color.black.alpha_(0.25), Color.black);
 guiScale.value=11;
+
+// save button
+SmoothButton(w, 40@20)
+	.states_([[ "save", Color.grey(0.95), Color.black.alpha_(0.25) ]] )
+	.action_({
+		CocoaDialog.savePanel({|path|
+			path.postln;
+			tmp= ZArchive.write(path);
+			tmp.writeItem(~data);
+			tmp.writeClose;
+		},{
+			"save cancelled".postln;
+		});
+	})
+	.canFocus_(false)
+	.border_(1)
+	.radius_(1);
+
+// load button
+SmoothButton(w, 40@20)
+	.states_([[ "load", Color.grey(0.95), Color.black.alpha_(0.25) ]] )
+	.action_({
+		CocoaDialog.getPaths({|paths|
+			tmp= ZArchive.read(paths[0]);
+			~data=tmp.readItem;
+			tmp.close;
+//			paths.do({|p|
+//				p.postln;
+//			})
+			},{
+				"cancelled".postln;
+			},
+			false // allow multiple
+		);
+	})
+	.canFocus_(false)
+	.border_(1)
+	.radius_(1);
 
 // window positions button
 
@@ -138,9 +178,17 @@ guiPart.setColors(
 guiPart.value=0;
 
 guiGen= EZPopUpMenu.new(c, 190@20, "generator : ");
-SynthDescLib.global.synthDescs.keys.asArray.sort.do{|item, i|
-	guiGen.addItem(item, {item. postln});
-};
+
+tmp= SynthDescLib.global.synthDescs.select({|def|
+		def.name.contains("e5_gen_");
+});
+
+tmp.do{|item, i|
+		guiGen.addItem(
+			item.name.replace("e5_gen_", ""),
+			{item.name.postln;}
+		);};
+
 guiGen.setColors(
 	Color.black.alpha_(0.25), Color.grey(0.95),
 	Color.black.alpha_(0.25), Color.black);
