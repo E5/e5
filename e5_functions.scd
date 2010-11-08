@@ -30,6 +30,14 @@
 
 /******************************************************************************/
 
+~f_createPart= {|name|
+	("~data." ++ name ++ "=();").interpret;
+	("~data." ++ name ++ ".player= ();").interpret;
+	("~data." ++ name ++ ".gen= ();").interpret;
+};
+
+/******************************************************************************/
+
 ~f_beatboxRow= {|view, seq, states|
 	// this function draws a drum machine row
 	// Will most likely become a Class, later.
@@ -40,8 +48,8 @@
 	triggers= Array.fill(seq.size);
 
 	layout= CompositeView(view,
-		(view.bounds.width-8) @ 40
-	)/*.background_(Color.rand)*/;
+		(view.bounds.width-8) @ 70
+	).background_(Color.rand);
 
 	layout.addFlowLayout(0@0);
 
@@ -69,7 +77,20 @@
 			});
 		
 		};
-		seq
+
+	layout.decorator.nextLine;
+
+	g = EZPopUpMenu.new(layout, 300@20, "macros : ");
+	[ "execute...", "-", "shift left", "shift right", "All off", "All on", "Randomise all", "Randomise non-quarter notes",
+		"Vary", "-", "new..." ].do{|item, i|
+		g.addItem(item, {item. postln});
+	};
+	g.setColors(
+		Color.black.alpha_(0.25), Color.grey(0.95),
+		Color.black.alpha_(0.25), Color.black);
+	g.value=0;
+
+	seq
 };
 
 //~f_knobRow= {|view, seq, spec|
@@ -118,5 +139,6 @@
 
 "Functions loaded...".postln;
 "\t~f_placeWindow".postln;
+"\t~f_createPart".postln;
 "\t~f_beatboxRow".postln;
 ""

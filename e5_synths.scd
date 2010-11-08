@@ -3,7 +3,7 @@
  *
  * terminal blackbox synths
  *
- * All terminal synths have the prefix 'tml_'
+ * All terminal synths have the prefix 'e5_'
  * plus 'gen_' or 'mod_' 
  *
  * Will use fredrik olofsson's enkalib as
@@ -12,7 +12,7 @@
  */
 
 // Simple buffer player
-SynthDef(\tml_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_trig=1, rate=1.0, length= 1.0, panPos=0, cmp_gain=1, cmp_threshhold=1.0|
+SynthDef(\e5_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_trig=1, rate=1.0, length= 1.0, panPos=0, cmp_gain=1, cmp_threshhold=1.0|
 	var signal, env;
 
 	signal= PlayBuf.ar(
@@ -57,7 +57,7 @@ SynthDef(\tml_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_tr
 
 
 // Cylob's Electribe drum synth
-SynthDef(\tml_gen_er1, {
+SynthDef(\e5_gen_er1, {
 	|outBus = 0, trig=0, midiFreq = 60, gate = 1.0, amp = 0.5, freqMult = 1,
 	waveType = 0, modType = 0, modDepth = 0.0, modSpeed = 4.0, ampDecay = 0.1|
 
@@ -96,7 +96,7 @@ SynthDef(\tml_gen_er1, {
 // SOSkick -------
 // http://www.soundonsound.com/sos/jan02/articles/synthsecrets0102.asp
 // increase mod_freq and mod_index for interesting electronic percussion
-//SynthDef(\tml_gen_SOSkick,
+//SynthDef(\e5_gen_SOSkick,
 //	{|out = 0, freq = 50, mod_freq = 5, mod_index = 5, sustain = 0.4, amp = 0.8, beater_noise_level = 0.025|
 //	var pitch_contour, drum_osc, drum_lpf, drum_env;
 //	var beater_source, beater_hpf, beater_lpf, lpf_cutoff_contour, beater_env;
@@ -128,7 +128,7 @@ SynthDef(\tml_gen_er1, {
 
 // SOSsnare -------
 // http://www.soundonsound.com/sos/Mar02/articles/synthsecrets0302.asp
-SynthDef(\tml_gen_SOSsnare,
+SynthDef(\e5_gen_SOSsnare,
 	{|out = 0, sustain = 0.1, drum_mode_level = 0.25,
 	snare_level = 40, snare_tightness = 1000,
 	freq = 405, amp = 0.8, noiseType=0|
@@ -173,7 +173,7 @@ SynthDef(\tml_gen_SOSsnare,
 
 // SOShats -------
 // http://www.soundonsound.com/sos/Jun02/articles/synthsecrets0602.asp
-SynthDef(\tml_gen_SOShats,
+SynthDef(\e5_gen_SOShats,
 	{|out = 0, freq = 6000, sustain = 0.1, amp = 0.8|
 	var root_cymbal, root_cymbal_square, root_cymbal_pmosc;
 	var initial_bpf_contour, initial_bpf, initial_env;
@@ -206,7 +206,7 @@ SynthDef(\tml_gen_SOShats,
 // SOStom -------
 // http://www.soundonsound.com/sos/Mar02/articles/synthsecrets0302.asp
 
-SynthDef(\tml_gen_SOStom,
+SynthDef(\e5_gen_SOStom,
 	{|out = 0, sustain = 0.4, drum_mode_level = 0.25,
 	freq = 90, drum_timbre = 1.0, amp = 0.8|
 	var drum_mode_sin_1, drum_mode_sin_2, drum_mode_pmosc, drum_mode_mix, drum_mode_env;
@@ -242,7 +242,7 @@ SynthDef(\tml_gen_SOStom,
  *
  */
  
-SynthDef(\tml_mod_compressor, {
+SynthDef(\e5_mod_compressor, {
 	|out=0, in=0, mix= 1, gain=1, thresh=1, slopeBelow=1, slopeAbove=0.5, clampTime=0.01,
 	relaxTime=0.01, makeUp=1|
 	var signal, fx;
@@ -266,7 +266,7 @@ SynthDef(\tml_mod_compressor, {
 /*
 	description: this is a ...
 */
-//SynthDef(\tml_mod_ring, {|out= 0, in= 0, ringFreq=15|
+//SynthDef(\e5_mod_ring, {|out= 0, in= 0, ringFreq=15|
 //	var signal, fx;
 //	signal= In.ar(in, 1);
 //	fx= signal * SinOsc.ar(ringFreq);

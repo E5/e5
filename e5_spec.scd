@@ -28,6 +28,10 @@ terminal spec
 
 	- Player- a pattern or task to trigger the sound
 
+- Data
+
+	- Has a 'global' event containing 
+
 - Workflow 1:
 
 	- First create a player:
