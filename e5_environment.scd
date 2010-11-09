@@ -275,6 +275,108 @@ SmoothButton(guiComp[0], 35@20)
 //SynthDefAutogui(\sample) ; // a synth is created
 
 (
+// Designing a playbuf gui
+var guiOut, guiBufnum, guiAmp, guiStartPos, guiLoop, guiRate, guiLength, guiPanPos, guiCmpGain, guiCmpThresh, guiCmpAtk, guiCmpRel, guiCmpSlopeBelow, guiCmpSlopeAbove, guiEnv, guiLayout;
+
+w= Window("E5:PartName:playbuf", Rect(741, 386, 429, 291)).front;
+w.addFlowLayout;
+guiOut= EZPopUpMenu(w, 140@20, "out : ", labelWidth: 40)
+	.action_{|me| };
+guiBufnum= EZPopUpMenu(w, 160@20, "sample : ", labelWidth: 50)
+	.action_{|me| };
+guiLoop= SmoothButton(w, 40@20)
+	.states_([
+		["loop", Color.black, Color.white], 
+		["loop", Color.white, Color.black] ])
+	.radius_(1)
+	.action_{|me| };
+w.view.decorator.nextLine;
+//guiLayout= CompositeView.background_(Color.rand);
+//guiLayout.addFlowLayout(0@0);
+StaticText(w, 266@20)
+	.string_("controls".padL)
+	.stringColor_(Color.white)
+	.background_(Color.black)
+	/*.align_(\center)*/;
+StaticText(w, 150@20)
+	.string_("envelope".padL)
+	.stringColor_(Color.white)
+	.background_(Color.black)
+	/*.align_(\center)*/;
+w.view.decorator.nextLine;
+["amp", "start", "rate", "length", "pan"].do{|label, i|
+	StaticText(w, 50@20)
+		.string_(label)
+		.background_(Color.white)
+		.align_(\center)
+		.action_{|me| };
+};
+w.view.decorator.nextLine;
+guiAmp= Knob(w, 50@44)
+	.action_{|me| };
+guiStartPos= Knob(w, 50@44)
+	.action_{|me| };
+guiRate= Knob(w, 50@44)
+	.action_{|me| };
+guiLength= Knob(w, 50@44)
+	.action_{|me| };
+guiPanPos= Knob(w, 50@44)
+	.action_{|me| };
+w.view.decorator.nextLine;
+5.do{
+	StaticText(w, 50@20)
+		.string_("0.0")
+		.stringColor_(Color.green)
+		.background_(Color.black)
+		.font_(Font("Monaco", 9))
+		.align_(\center)
+		.action_{|me| };
+};
+w.view.decorator.nextLine.shift(270, -96);
+guiEnv= EnvelopeView(w, 150@92)
+	.action_{|me| };
+w.view.decorator.nextLine;
+StaticText(w, 320@20)
+	.string_("compressor".padL)
+	.stringColor_(Color.white)
+	.background_(Color.black)
+	/*.align_(\center)*/;
+w.view.decorator.nextLine;
+["gain", "threshold", "attack", "release", "below", "above"].do{|label, i|
+	StaticText(w, 50@20)
+		.string_(label)
+		.background_(Color.white)
+		.align_(\center);
+};
+w.view.decorator.nextLine;
+guiCmpGain= Knob(w, 50@44)
+	.action_{|me| };
+guiCmpThresh= Knob(w, 50@44)
+	.action_{|me| };
+guiCmpAtk= Knob(w, 50@44)
+	.action_{|me| };
+guiCmpRel= Knob(w, 50@44)
+	.action_{|me| };
+guiCmpSlopeBelow= Knob(w, 50@44)
+	.action_{|me| };
+guiCmpSlopeAbove= Knob(w, 50@44)
+	.action_{|me| };
+w.view.decorator.nextLine;
+6.do{
+	StaticText(w, 50@20)
+		.string_("0.0")
+		.stringColor_(Color.green)
+		.background_(Color.black)
+		.font_(Font("Monaco", 9))
+		.align_(\center)
+		.action_{|me| };
+};
+
+)
+
+/******************************************************************************/
+
+(
 // autogui on a CompositeView
 
 // SynthDef(\test, {arg out = 3, freq = 100; Out.ar(out, SinOsc.ar(freq))}) ;
@@ -286,6 +388,8 @@ v=CompositeView.new(w,w.view.bounds.insetBy(10)).background_(Color.rand);
 		.autogui(window:v, step:30/*, vOff: height*(i%6), hOff:250*((i/6)).asInteger*/);
 )
 v.visible_(true)
+
+/******************************************************************************/
 
 c= ~data.keys.reject{|key|
 	key== \global;
