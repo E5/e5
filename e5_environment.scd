@@ -276,10 +276,14 @@ SmoothButton(guiComp[0], 35@20)
 
 (
 // Designing a playbuf gui
-var guiOut, guiBufnum, guiAmp, guiStartPos, guiLoop, guiRate, guiLength, guiPanPos, guiCmpGain, guiCmpThresh, guiCmpAtk, guiCmpRel, guiCmpSlopeBelow, guiCmpSlopeAbove, guiEnv, guiLayout;
 
-w= Window("E5:PartName:playbuf", Rect(741, 386, 429, 291)).front;
+var	guiView, guiOut, guiBufnum, guiAmp, guiStartPos, guiLoop, guiRate,
+	guiLength, guiPanPos, guiCmpGain, guiCmpThresh, guiCmpAtk, guiCmpRel,
+	guiCmpSlopeBelow, guiCmpSlopeAbove, guiEnv, guiLayout;
+
+w= Window("E5:PartName:playbuf", Rect(741, 367, 500, 310)).front;
 w.addFlowLayout;
+
 guiOut= EZPopUpMenu(w, 140@20, "out : ", labelWidth: 40)
 	.action_{|me| };
 guiBufnum= EZPopUpMenu(w, 160@20, "sample : ", labelWidth: 50)
@@ -291,85 +295,113 @@ guiLoop= SmoothButton(w, 40@20)
 	.radius_(1)
 	.action_{|me| };
 w.view.decorator.nextLine;
-//guiLayout= CompositeView.background_(Color.rand);
-//guiLayout.addFlowLayout(0@0);
-StaticText(w, 266@20)
-	.string_("controls".padL)
+
+////////////////////////////////////////////////////////////////////////////////
+
+guiLayout= CompositeView(w, 328@120).background_(Color.rand);
+guiLayout.addFlowLayout(0@0);
+StaticText(guiLayout, 328@20)
+	.string_("controls")
 	.stringColor_(Color.white)
-	.background_(Color.black)
-	/*.align_(\center)*/;
-StaticText(w, 150@20)
-	.string_("envelope".padL)
-	.stringColor_(Color.white)
-	.background_(Color.black)
-	/*.align_(\center)*/;
-w.view.decorator.nextLine;
+	.background_(Color.black.alpha_(0.7))
+	.align_(\center);
+guiLayout.decorator.margin_(4@4).nextLine.shift(2,0);
 ["amp", "start", "rate", "length", "pan"].do{|label, i|
-	StaticText(w, 50@20)
+	StaticText(guiLayout, 60@11)
 		.string_(label)
-		.background_(Color.white)
+		.background_(Color.white.alpha_(0.5))
+		.font_(Font("MINI7Tight", 7))
 		.align_(\center)
 		.action_{|me| };
 };
-w.view.decorator.nextLine;
-guiAmp= Knob(w, 50@44)
+guiLayout.decorator.nextLine;
+guiAmp= Knob(guiLayout, 60@53)
 	.action_{|me| };
-guiStartPos= Knob(w, 50@44)
+guiAmp.color[0] = Color.clear;
+guiStartPos= Knob(guiLayout, 60@53)
 	.action_{|me| };
-guiRate= Knob(w, 50@44)
+guiStartPos.color[0] = Color.clear;
+guiRate= Knob(guiLayout, 60@53)
 	.action_{|me| };
-guiLength= Knob(w, 50@44)
+guiRate.color[0] = Color.clear;
+guiLength= Knob(guiLayout, 60@53)
 	.action_{|me| };
-guiPanPos= Knob(w, 50@44)
+guiLength.color[0] = Color.clear;
+guiPanPos= Knob(guiLayout, 60@53)
 	.action_{|me| };
-w.view.decorator.nextLine;
+guiPanPos.color[0] = Color.clear;
+guiLayout.decorator.nextLine;
 5.do{
-	StaticText(w, 50@20)
-		.string_("0.0")
+	SmoothNumberBox(guiLayout, 60@20)
+		.value_(1.0)
 		.stringColor_(Color.green)
+		.normalColor_(Color.green)
 		.background_(Color.black)
 		.font_(Font("Monaco", 9))
 		.align_(\center)
-		.action_{|me| };
+		.action_({|me| me.value.postln; });
 };
-w.view.decorator.nextLine.shift(270, -96);
-guiEnv= EnvelopeView(w, 150@92)
-	.action_{|me| };
-w.view.decorator.nextLine;
-StaticText(w, 320@20)
-	.string_("compressor".padL)
+
+////////////////////////////////////////////////////////////////////////////////
+
+guiLayout= CompositeView(w, 160@120).background_(Color.rand);
+guiLayout.addFlowLayout(0@0);
+StaticText(guiLayout, 160@20)
+	.string_("envelope")
 	.stringColor_(Color.white)
-	.background_(Color.black)
-	/*.align_(\center)*/;
+	.background_(Color.black.alpha_(0.7))
+	.align_(\center);
+guiLayout.decorator.margin_(4@4).nextLine;
+guiEnv= EnvelopeView(guiLayout, 152@91)
+	.action_{|me| };
+
+////////////////////////////////////////////////////////////////////////////////
+
 w.view.decorator.nextLine;
-["gain", "threshold", "attack", "release", "below", "above"].do{|label, i|
-	StaticText(w, 50@20)
+guiLayout= CompositeView(w, 328@111).background_(Color.rand);
+guiLayout.addFlowLayout(0@0);
+StaticText(guiLayout, 328@20)
+	.string_("compressor")
+	.stringColor_(Color.white)
+	.background_(Color.black.alpha_(0.7))
+	.align_(\center);
+guiLayout.decorator.margin_(4@4).nextLine;
+["gain", "thresh", "attack", "release", "below", "above"].do{|label, i|
+	StaticText(guiLayout, 50@11)
 		.string_(label)
-		.background_(Color.white)
+		.background_(Color.white.alpha_(0.5))
+		.font_(Font("MINI7Tight", 7))
 		.align_(\center);
 };
-w.view.decorator.nextLine;
-guiCmpGain= Knob(w, 50@44)
+guiLayout.decorator.nextLine;
+guiCmpGain= Knob(guiLayout, 50@44)
 	.action_{|me| };
-guiCmpThresh= Knob(w, 50@44)
+guiCmpGain.color[0] = Color.clear;
+guiCmpThresh= Knob(guiLayout, 50@44)
 	.action_{|me| };
-guiCmpAtk= Knob(w, 50@44)
+guiCmpThresh.color[0] = Color.clear;
+guiCmpAtk= Knob(guiLayout, 50@44)
 	.action_{|me| };
-guiCmpRel= Knob(w, 50@44)
+guiCmpAtk.color[0] = Color.clear;
+guiCmpRel= Knob(guiLayout, 50@44)
 	.action_{|me| };
-guiCmpSlopeBelow= Knob(w, 50@44)
+guiCmpRel.color[0] = Color.clear;
+guiCmpSlopeBelow= Knob(guiLayout, 50@44)
 	.action_{|me| };
-guiCmpSlopeAbove= Knob(w, 50@44)
+guiCmpSlopeBelow.color[0] = Color.clear;
+guiCmpSlopeAbove= Knob(guiLayout, 50@44)
 	.action_{|me| };
-w.view.decorator.nextLine;
+guiCmpSlopeAbove.color[0] = Color.clear;
+guiLayout.decorator.nextLine;
 6.do{
-	StaticText(w, 50@20)
-		.string_("0.0")
+	SmoothNumberBox(guiLayout, 50@20)
+		.value_(1.0)
 		.stringColor_(Color.green)
+		.normalColor_(Color.green)
 		.background_(Color.black)
 		.font_(Font("Monaco", 9))
 		.align_(\center)
-		.action_{|me| };
+		.action_({|me| me.value.postln; });
 };
 
 )
