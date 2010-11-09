@@ -1,6 +1,6 @@
 /**
  *
- * terminal functions
+ * e5 functions
  *
  * This file contains most of the functions used by terminal.
  *

@@ -1,7 +1,7 @@
 
 /*
 
-terminal spec
+e5 spec
  
 - an environment for playing and composing.
 

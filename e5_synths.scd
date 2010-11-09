@@ -1,7 +1,7 @@
 (
 /**
  *
- * terminal blackbox synths
+ * e5 synths
  *
  * All terminal synths have the prefix 'e5_'
  * plus 'gen_' or 'mod_' 
@@ -39,6 +39,7 @@ SynthDef(\e5_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_tri
 	signal= EnvGen.kr(Env.cutoff(1, 1), 0, amp, 0, BufDur.kr(bufnum) * length) * signal;
 
 	Out.ar(out, signal);
+
 }, metadata: (
 	specs: (
 		out: [0, 7, 'lin', 1, 0, ""],
@@ -57,7 +58,7 @@ SynthDef(\e5_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_tri
 
 
 // Cylob's Electribe drum synth
-SynthDef(\e5_gen_er1, {
+SynthDef(\e5_gen_ER-1, {
 	|outBus = 0, trig=0, midiFreq = 60, gate = 1.0, amp = 0.5, freqMult = 1,
 	waveType = 0, modType = 0, modDepth = 0.0, modSpeed = 4.0, ampDecay = 0.1|
 
@@ -89,42 +90,56 @@ SynthDef(\e5_gen_er1, {
 	ampEnvGen = EnvGen.kr(Env.perc(0.0001, ampDecay, 1, -6), gate);
 	output = output * ampEnvGen * amp;
 	output = Limiter.ar(output, 0.9, 0.01);
+
 	Out.ar(outBus, output ! 2);
-	}
+
+	}, metadata: (
+	specs: (
+		midiFreq: [1, 128, 'lin', 0, 60, ""],
+		amp: [0, 1, 'amp', 0, 0, ""],
+		freqMult: [0.25, 8, 'lin', 0, 0, ""],
+		waveType: [0, 1, 'lin', 1, 0, ""],
+		modType: [0, 1, 'lin', 1, 0, ""],
+		modDepth: [0, 10, 'lin', 0, 0, ""],
+		modSpeed: [0, 10, 'lin', 0, 4.0, ""],
+		ampDecay: [0, 4, 'lin', 0, 0.1, ""]
+	))
 ).add;
 
 // SOSkick -------
 // http://www.soundonsound.com/sos/jan02/articles/synthsecrets0102.asp
 // increase mod_freq and mod_index for interesting electronic percussion
-//SynthDef(\e5_gen_SOSkick,
-//	{|out = 0, freq = 50, mod_freq = 5, mod_index = 5, sustain = 0.4, amp = 0.8, beater_noise_level = 0.025|
-//	var pitch_contour, drum_osc, drum_lpf, drum_env;
-//	var beater_source, beater_hpf, beater_lpf, lpf_cutoff_contour, beater_env;
-//	var kick_mix;
-//	pitch_contour = Line.kr(freq*2, freq, 0.02);
-//	drum_osc = PMOsc.ar(	pitch_contour,
-//				mod_freq,
-//				mod_index/1.3,
-//				mul: 1,
-//				add: 0);
-//	drum_lpf = LPF.ar(in: drum_osc, freq: 1000, mul: 1, add: 0);
-//	drum_env = drum_lpf * EnvGen.ar(Env.perc(0.005, sustain), 1.0, doneAction: 2);
-//	beater_source = WhiteNoise.ar(beater_noise_level);
-//	beater_hpf = HPF.ar(in: beater_source, freq: 500, mul: 1, add: 0);
-//	lpf_cutoff_contour = Line.kr(6000, 500, 0.03);
-//	beater_lpf = LPF.ar(in: beater_hpf, freq: lpf_cutoff_contour, mul: 1, add: 0);
-//	beater_env = beater_lpf * EnvGen.ar(Env.perc, 1.0, doneAction: 2);
-//	kick_mix = Mix.new([drum_env, beater_env]) * 2 * amp;
-//	Out.ar(out, [kick_mix, kick_mix])
-//}, metadata: (
-//	specs: (
-//		freq: [20, 20000, 'exp', 0, 440, " Hz"],
-//		mod_freq: [20, 20000, 'exp', 0, 440, " Hz"],
-//		mod_index: [0, 100, 'lin', 0, 0, ""],
-//		sustain: [0, 1, 'amp', 0, 0, ""],
-//		amp: [0, 1, 'amp', 0, 0, ""],
-//		beater_noise_level: [0, 1, 'amp', 0, 0, ""]	)
-//)).add;
+SynthDef(\e5_gen_SOSkick,
+	{|out = 0, freq = 50, mod_freq = 5, mod_index = 5, sustain = 0.4, amp = 0.8, beater_noise_level = 0.025|
+	var pitch_contour, drum_osc, drum_lpf, drum_env;
+	var beater_source, beater_hpf, beater_lpf, lpf_cutoff_contour, beater_env;
+	var kick_mix;
+	pitch_contour = Line.kr(freq*2, freq, 0.02);
+	drum_osc = PMOsc.ar(	pitch_contour,
+				mod_freq,
+				mod_index/1.3,
+				mul: 1,
+				add: 0);
+	drum_lpf = LPF.ar(in: drum_osc, freq: 1000, mul: 1, add: 0);
+	drum_env = drum_lpf * EnvGen.ar(Env.perc(0.005, sustain), 1.0, doneAction: 2);
+	beater_source = WhiteNoise.ar(beater_noise_level);
+	beater_hpf = HPF.ar(in: beater_source, freq: 500, mul: 1, add: 0);
+	lpf_cutoff_contour = Line.kr(6000, 500, 0.03);
+	beater_lpf = LPF.ar(in: beater_hpf, freq: lpf_cutoff_contour, mul: 1, add: 0);
+	beater_env = beater_lpf * EnvGen.ar(Env.perc, 1.0, doneAction: 2);
+	kick_mix = Mix.new([drum_env, beater_env]) * 2 * amp;
+
+	Out.ar(out, [kick_mix, kick_mix])
+
+}, metadata: (
+	specs: (
+		freq: [20, 20000, 'exp', 0, 440, " Hz"],
+		mod_freq: [20, 20000, 'exp', 0, 440, " Hz"],
+		mod_index: [0, 100, 'lin', 0, 0, ""],
+		sustain: [0, 1, 'amp', 0, 0, ""],
+		amp: [0, 1, 'amp', 0, 0, ""],
+		beater_noise_level: [0, 1, 'amp', 0, 0, ""]	)
+)).add;
 
 // SOSsnare -------
 // http://www.soundonsound.com/sos/Mar02/articles/synthsecrets0302.asp

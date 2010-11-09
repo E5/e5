@@ -1,6 +1,6 @@
 /**
  *
- * terminal environment
+ * e5 environment
  *
  * This file sets up the terminal gui. It will call the other files too.
  * It's the big boss file.

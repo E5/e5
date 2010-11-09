@@ -1,7 +1,7 @@
 (
 /**
  *
- * terminal data
+ * e5 data
  *
  */
 

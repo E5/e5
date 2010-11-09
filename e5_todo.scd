@@ -1,14 +1,9 @@
 
 /*
 
-terminal todo
+e5 todo
  
 ********************************************************************************
-
-- First, write code to generate a 'part' via code (in ~data event, with empty
-  slots for player, synth and fx.
-
-- Then link the above code to a gui, so I can do it without code.
 
 - Write Spec metadata into all synths.
 
@@ -20,6 +15,11 @@ terminal todo
 ********************************************************************************
 
 done
+
+- First, write code to generate a 'part' via code (in ~data event, with empty
+  slots for player, synth and fx. Ã
+
+- Then link the above code to a gui, so I can do it without code. Ã
 
 - Think of a better name than 'terminal'.Ã
 
