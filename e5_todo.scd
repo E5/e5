@@ -11,7 +11,16 @@ e5 todo
 
 - Incorporate 'matrix-edit' (Piano roll), once it's written.
 
- 
+- Get one part working (with my first playbuf synth), using
+  code and / or gui.
+
+- Write playbuf gui into a function.
+
+- Put some gui elements into the ~data. Eg, each part will have it's own
+  CompositeView. This should make it easier to show/hide, etc:
+  
+  ~data.kick1.gui.layout.visible_(false);
+
 ********************************************************************************
 
 done

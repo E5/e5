@@ -17,7 +17,8 @@ e5 spec
 	- Listener
 
 	- Inspector: autogui window for editing controls
-	  and sequences. Also for routing and stuff.
+	  and sequences. Also for routing and stuff. Actually, don't need
+	  autogui. Will just design gui's for the few synths I'll use.
 
 	- Mixer. Usually hidden. Probably based around MixerChannel
 	  (ddwLib).
