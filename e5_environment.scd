@@ -22,17 +22,14 @@ SynthDescLib.global.synthDescs.keys.asArray.sort.do{|item, i|
 	item = item.asString;
 	if(item.contains("e5_gen_"), {
 		item.postln;
-		~data.global.gen.add(item);
-//		~data.global.gen.add(item.replace("e5_gen_", ""));
+		~data.global.gen= ~data.global.gen.add(
+			item.replace("e5_gen_", ""));
 	});
 	if(item.contains("e5_mod_"), {
-		~data.global.mod.add(item.replace("e5_mod_", ""));
+		~data.global.mod= ~data.global.mod.add(
+			item.replace("e5_mod_", ""));
 	});
-}
-//SynthDescLib.global.synthDescs.select({|def|
-//		def.name.contains("e5_gen_");
-//});
-
+};
 
 )
 
@@ -197,16 +194,28 @@ guiPart.value=0;
 
 guiGen= EZPopUpMenu.new(c, 190@20, "generator : ");
 
-tmp= SynthDescLib.global.synthDescs.select({|def|
-		def.name.contains("e5_gen_");
-});
+//tmp= SynthDescLib.global.synthDescs.select({|def|
+//		def.name.contains("e5_gen_");
+//});
 
-tmp.do{|item, i|
+~data.global.gen.do{|item, i|
+	switch(item.asSymbol,
+		\ER_1, {},
+		\SOShats, {},
+		\SOSkick, {},
+		\SOSsnare, {},
+		\SOStom, {},
+		\playbuf, { tmp= ~f_playbufGui.value(guiComp[1]);}
+//		\playbuf, {
+//			guiGen.addItem(
+//				item, {
+//					~f_playbufGui.value(guiComp[1]);
+//					item.name.postln; } ); }
+	);
 	guiGen.addItem(
-		item.name.replace("e5_gen_", ""),
-		{item.name.postln;}
-	);};
-guiGen.items.do{|item, i| item.key.postln;};
+		item, { item.name.postln; tmp; } );
+};
+//guiGen.items.do{|item, i| item.key.postln;};
 guiGen.setColors(
 	Color.black.alpha_(0.25), Color.grey(0.95),
 	Color.black.alpha_(0.25), Color.black);
