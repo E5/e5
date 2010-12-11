@@ -16,7 +16,7 @@
 	"e5_data.scd",
 ].do(_.loadRelative);
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 ~data.global.gen= [];
 ~data.global.mod= [];
 SynthDescLib.global.synthDescs.keys.asArray.sort.do{|item, i|
@@ -32,8 +32,8 @@ SynthDescLib.global.synthDescs.keys.asArray.sort.do{|item, i|
 	});
 };
 
-=======
->>>>>>> 63076e5... Writing a playbuf gui function.
+//=======
+//>>>>>>> 63076e5... Writing a playbuf gui function.
 )
 
 /******************************************************************************/
@@ -201,7 +201,7 @@ guiGen= EZPopUpMenu.new(c, 190@20, "generator : ");
 //		def.name.contains("e5_gen_");
 //});
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 ~data.global.gen.do{|item, i|
 	switch(item.asSymbol,
 		\ER_1, {},
@@ -220,14 +220,14 @@ guiGen= EZPopUpMenu.new(c, 190@20, "generator : ");
 		item, { item.name.postln; tmp; } );
 };
 //guiGen.items.do{|item, i| item.key.postln;};
-=======
+//=======
 tmp.do{|item, i|
 		guiGen.addItem(
 			item.name.replace("e5_gen_", ""),
 			{item.name.postln;}
 		);};
 
->>>>>>> 63076e5... Writing a playbuf gui function.
+//>>>>>>> 63076e5... Writing a playbuf gui function.
 guiGen.setColors(
 	Color.black.alpha_(0.25), Color.grey(0.95),
 	Color.black.alpha_(0.25), Color.black);
