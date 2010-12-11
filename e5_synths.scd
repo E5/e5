@@ -58,7 +58,7 @@ SynthDef(\e5_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_tri
 
 
 // Cylob's Electribe drum synth
-SynthDef(\e5_gen_ER_1, {
+SynthDef(\e5_gen_ER-1, {
 	|outBus = 0, trig=0, midiFreq = 60, gate = 1.0, amp = 0.5, freqMult = 1,
 	waveType = 0, modType = 0, modDepth = 0.0, modSpeed = 4.0, ampDecay = 0.1|
 
