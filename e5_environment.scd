@@ -1,11 +1,11 @@
-/**
- *
- * e5 environment
- *
- * This file sets up the terminal gui. It will call the other files too.
- * It's the big boss file.
- *
- */
+/*******************************************************************************
+
+E5 Environment
+
+This file sets up the E5 gui. It will call the other files too.
+It's the big boss file.
+
+*******************************************************************************/
 
 (
 // Run this first
@@ -32,8 +32,6 @@ SynthDescLib.global.synthDescs.keys.asArray.sort.do{|item, i|
 	});
 };
 
-//=======
-//>>>>>>> 63076e5... Writing a playbuf gui function.
 )
 
 /******************************************************************************/
@@ -201,7 +199,6 @@ guiGen= EZPopUpMenu.new(c, 190@20, "generator : ");
 //		def.name.contains("e5_gen_");
 //});
 
-//<<<<<<< HEAD
 ~data.global.gen.do{|item, i|
 	switch(item.asSymbol,
 		\ER_1, {},
@@ -220,7 +217,7 @@ guiGen= EZPopUpMenu.new(c, 190@20, "generator : ");
 		item, { item.name.postln; tmp; } );
 };
 //guiGen.items.do{|item, i| item.key.postln;};
-//=======
+
 tmp.do{|item, i|
 		guiGen.addItem(
 			item.name.replace("e5_gen_", ""),
@@ -335,7 +332,7 @@ guiLoop= SmoothButton(w, 40@20)
 	.action_{|me| };
 w.view.decorator.nextLine;
 
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************/
 
 guiLayout= CompositeView(w, 328@120).background_(Color.rand);
 guiLayout.addFlowLayout(0@0);
@@ -381,7 +378,7 @@ guiLayout.decorator.nextLine;
 		.action_({|me| me.value.postln; });
 };
 
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************/
 
 guiLayout= CompositeView(w, 160@120).background_(Color.rand);
 guiLayout.addFlowLayout(0@0);
@@ -394,7 +391,7 @@ guiLayout.decorator.margin_(4@4).nextLine;
 guiEnv= EnvelopeView(guiLayout, 152@91)
 	.action_{|me| };
 
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************/
 
 w.view.decorator.nextLine;
 guiLayout= CompositeView(w, 328@111).background_(Color.rand);
@@ -456,7 +453,12 @@ v=CompositeView.new(w,w.view.bounds.insetBy(10)).background_(Color.rand);
 //v.decorator=FlowLayout(v.bounds);
 	Synth(\Sinner)
 		.set(\out, 0, \freq, 440)
-		.autogui(window:v, step:30/*, vOff: height*(i%6), hOff:250*((i/6)).asInteger*/);
+		.autogui(
+			window: v,
+			step: 30/*,
+			vOff: height*(i%6),
+			hOff: 250*((i/6)).asInteger*/
+		);
 )
 v.visible_(true)
 

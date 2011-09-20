@@ -1,9 +1,9 @@
 
-/*
+/******************************************************************************
 
-e5 spec
+E5 Specification
  
-- an environment for playing and composing.
+An environment for playing and composing.
 
 ********************************************************************************
 
@@ -90,5 +90,5 @@ e5 spec
 - Each section (widget & synth) must have a 'lock' button, to protect from
   accidental fuckups.
 
-*/
+*******************************************************************************/
 

@@ -1,12 +1,10 @@
-/**
- *
- * e5 functions
- *
- * This file contains most of the functions used by terminal.
- *
- */
+/*******************************************************************************
 
-/******************************************************************************/
+E5 Functions
+
+This file contains most of the functions used by E5.
+
+*******************************************************************************/
 
 ~f_placeWindow= {|listener, current, inspector|
 	// this function resizes and positions
@@ -81,8 +79,19 @@
 	layout.decorator.nextLine;
 
 	g = EZPopUpMenu.new(layout, 300@20, "macros : ");
-	[ "execute...", "-", "shift left", "shift right", "All off", "All on", "Randomise all", "Randomise non-quarter notes",
-		"Vary", "-", "new..." ].do{|item, i|
+	[
+		"execute...",
+		"-",
+		"shift left",
+		"shift right",
+		"All off",
+		"All on",
+		"Randomise all",
+		"Randomise non-quarter notes",
+		"Vary",
+		"-",
+		"new...",
+	].do{|item, i|
 		g.addItem(item, {item. postln});
 	};
 	g.setColors(

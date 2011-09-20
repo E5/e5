@@ -1,18 +1,18 @@
 (
-/**
- *
- * e5 synths
- *
- * All terminal synths have the prefix 'e5_'
- * plus 'gen_' or 'mod_' 
- *
- * Will use fredrik olofsson's enkalib as
- * an inspiration.
- *
- */
+/*******************************************************************************
+
+E5 Synths
+
+All E5 synths have the prefix 'e5_'
+plus 'gen_' or 'mod_' (generator or modulator).
+
+Inspired by Fredrik Olofsson's enkalib.
+
+*******************************************************************************/
 
 // Simple buffer player
-SynthDef(\e5_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_trig=1, rate=1.0, length= 1.0, panPos=0, cmp_gain=1, cmp_threshhold=1.0|
+SynthDef(\e5_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0,
+	t_trig=1, rate=1.0, length= 1.0, panPos=0, cmp_gain=1, cmp_threshhold=1.0|
 	var signal, env;
 
 	signal= PlayBuf.ar(
@@ -56,7 +56,6 @@ SynthDef(\e5_gen_playbuf, {|out= 0, bufnum=0, amp=0.5, startPos=0, loop=0, t_tri
 	))
 ).add;
 
-
 // Cylob's Electribe drum synth
 SynthDef(\e5_gen_ER-1, {
 	|outBus = 0, trig=0, midiFreq = 60, gate = 1.0, amp = 0.5, freqMult = 1,
@@ -67,8 +66,7 @@ SynthDef(\e5_gen_ER-1, {
 	freq = midiFreq.midicps * freqMult;
 	white = WhiteNoise.ar;
 	modEnvGen = EnvGen.kr(Env.perc(0.0001, modSpeed.reciprocal, 1, -6), gate, doneAction: 2);
-	pitchMod = 
-		Select.kr(modType, 
+	pitchMod = Select.kr(modType, 
 			[
 			LFSaw.ar(modSpeed), LFPulse.ar(modSpeed), 
 			LFTri.ar(modSpeed), Latch.ar(white, Impulse.ar(modSpeed)), 
@@ -94,15 +92,15 @@ SynthDef(\e5_gen_ER-1, {
 	Out.ar(outBus, output ! 2);
 
 	}, metadata: (
-	specs: (
-		midiFreq: [1, 128, 'lin', 0, 60, ""],
-		amp: [0, 1, 'amp', 0, 0, ""],
-		freqMult: [0.25, 8, 'lin', 0, 0, ""],
-		waveType: [0, 1, 'lin', 1, 0, ""],
-		modType: [0, 1, 'lin', 1, 0, ""],
-		modDepth: [0, 10, 'lin', 0, 0, ""],
-		modSpeed: [0, 10, 'lin', 0, 4.0, ""],
-		ampDecay: [0, 4, 'lin', 0, 0.1, ""]
+		specs: (
+			midiFreq: [1, 128, 'lin', 0, 60, ""],
+			amp: [0, 1, 'amp', 0, 0, ""],
+			freqMult: [0.25, 8, 'lin', 0, 0, ""],
+			waveType: [0, 1, 'lin', 1, 0, ""],
+			modType: [0, 1, 'lin', 1, 0, ""],
+			modDepth: [0, 10, 'lin', 0, 0, ""],
+			modSpeed: [0, 10, 'lin', 0, 4.0, ""],
+			ampDecay: [0, 4, 'lin', 0, 0.1, ""]
 	))
 ).add;
 
@@ -110,7 +108,8 @@ SynthDef(\e5_gen_ER-1, {
 // http://www.soundonsound.com/sos/jan02/articles/synthsecrets0102.asp
 // increase mod_freq and mod_index for interesting electronic percussion
 SynthDef(\e5_gen_SOSkick,
-	{|out = 0, freq = 50, mod_freq = 5, mod_index = 5, sustain = 0.4, amp = 0.8, beater_noise_level = 0.025|
+	{|out = 0, freq = 50, mod_freq = 5, mod_index = 5, sustain = 0.4, amp = 0.8,
+	beater_noise_level = 0.025|
 	var pitch_contour, drum_osc, drum_lpf, drum_env;
 	var beater_source, beater_hpf, beater_lpf, lpf_cutoff_contour, beater_env;
 	var kick_mix;
@@ -185,7 +184,6 @@ SynthDef(\e5_gen_SOSsnare,
 	)
 )).add;
 
-
 // SOShats -------
 // http://www.soundonsound.com/sos/Jun02/articles/synthsecrets0602.asp
 SynthDef(\e5_gen_SOShats,
@@ -216,7 +214,6 @@ SynthDef(\e5_gen_SOShats,
 		amp: [0, 1, 'amp', 0, 0, ""]
 	)
 )).add;
-
 
 // SOStom -------
 // http://www.soundonsound.com/sos/Mar02/articles/synthsecrets0302.asp
@@ -251,11 +248,11 @@ SynthDef(\e5_gen_SOStom,
 	))
 ).add;
 
-/**
- *
- * Processors
- *
- */
+/*******************************************************************************
+
+Processors
+
+*******************************************************************************/
  
 SynthDef(\e5_mod_compressor, {
 	|out=0, in=0, mix= 1, gain=1, thresh=1, slopeBelow=1, slopeAbove=0.5, clampTime=0.01,
@@ -273,14 +270,13 @@ SynthDef(\e5_mod_compressor, {
 		relaxTime,
 		makeUp
 	);
-
 	ReplaceOut.ar(out, XFade2.ar(signal, fx, mix));
 }
 ).add;
 
-/*
+/*******************************************************************************
 	description: this is a ...
-*/
+
 //SynthDef(\e5_mod_ring, {|out= 0, in= 0, ringFreq=15|
 //	var signal, fx;
 //	signal= In.ar(in, 1);
@@ -291,16 +287,15 @@ SynthDef(\e5_mod_compressor, {
 //		myRing: ControlSpec(0.001, 100, \exp, 0, 5, "Hz")
 //	)
 //)).add;
-
-/*
-	example:
-	b= Synth(\xxxx_mod_template);
-	a= Synth(\xxxx_gen_template);
-	b.set(\myRing, 15);
-	b.set(\mix, 0);			//-1= dry, 1= wet
-	b.free;
-	a.set(\gate, 0);	
-*/
+//
+//	example:
+//	b= Synth(\xxxx_mod_template);
+//	a= Synth(\xxxx_gen_template);
+//	b.set(\myRing, 15);
+//	b.set(\mix, 0);			//-1= dry, 1= wet
+//	b.free;
+//	a.set(\gate, 0);	
+*******************************************************************************/
 
 "Synths loaded...".postln;
 //~data.postln;
