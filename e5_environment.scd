@@ -57,33 +57,35 @@ guiComp= Array.fill(2);
 
 guiBpm= EZSmoothSlider(w,
 	300@20,
-	"bpm :".padR,
+	"bpm:".padR,
 	[10, 500, \lin, 1],
 	{|me|
 		~data.global.bpm= me.value;
 		(me.value.asString ++ "bpm".padL).postln;
-	}
+	},
+	labelWidth: 32
 );
-guiBpm.setColors(Color.black.alpha_(0.25), Color.grey(0.95));
+//guiBpm.setColors(Color.black.alpha_(0.25), Color.grey(0.95));
+guiBpm.labelView.align_( \left );
 guiBpm.value_(~data.global.bpm);
 
-guiKey= EZPopUpMenu.new(w, 130@20, "key : ");
+guiKey= EZPopUpMenu.new(w, 130@20, "key : ", labelWidth: 32);
 ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "Bb", "B"].do{|item, i|
 	guiKey.addItem(item, {item. postln});
 };
-guiKey.setColors(
-	Color.black.alpha_(0.25), Color.grey(0.95),
-	Color.black.alpha_(0.25), Color.black);
-guiKey.value=0;
+//guiKey.setColors(
+//	Color.black.alpha_(0.25), Color.grey(0.95),
+//	Color.black.alpha_(0.25), Color.black);
+guiKey.value= 0;
 
-guiScale= EZPopUpMenu.new(w, 200@20, "scale : ");
+guiScale= EZPopUpMenu.new(w, 200@20, "scale : ", labelWidth: 40);
 ScaleInfo.scales.keys.asArray.sort.do{|item, i|
 	guiScale.addItem(item, {|me| [me.value, item].postln});
 };
-guiScale.setColors(
-	Color.black.alpha_(0.25), Color.grey(0.95),
-	Color.black.alpha_(0.25), Color.black);
-guiScale.value=11;
+//guiScale.setColors(
+//	Color.black.alpha_(0.25), Color.grey(0.95),
+//	Color.black.alpha_(0.25), Color.black);
+guiScale.value= 11;
 
 // save button
 SmoothButton(w, 40@20)
@@ -169,7 +171,7 @@ guiPlay= SmoothButton(w, 80@20)
 		[ \stop, Color.black, Color.red ] ] )
 	.action_({
 	})
-	.border_(1)
+//	.border_(1)
 	.radius_(5)
 	.canFocus_(false);
 
@@ -188,9 +190,9 @@ if (guiPart.items[0].isNil, {guiPart.addItem("no parts", {})});
 //guiPart.items[0].postln;
 //guiPart.addItem("no parts", {});
 
-guiPart.setColors(
-	Color.black.alpha_(0.25), Color.grey(0.95),
-	Color.black.alpha_(0.25), Color.black);
+//guiPart.setColors(
+//	Color.black.alpha_(0.25), Color.grey(0.95),
+//	Color.black.alpha_(0.25), Color.black);
 guiPart.value=0;
 
 guiGen= EZPopUpMenu.new(c, 190@20, "generator : ");
@@ -224,10 +226,9 @@ tmp.do{|item, i|
 			{item.name.postln;}
 		);};
 
-//>>>>>>> 63076e5... Writing a playbuf gui function.
-guiGen.setColors(
-	Color.black.alpha_(0.25), Color.grey(0.95),
-	Color.black.alpha_(0.25), Color.black);
+//guiGen.setColors(
+//	Color.black.alpha_(0.25), Color.grey(0.95),
+//	Color.black.alpha_(0.25), Color.black);
 guiGen.value=0;
 
 guiComp[0]= CompositeView.new(c, c.bounds.width-8@100)
@@ -254,18 +255,18 @@ guiWidget= EZPopUpMenu.new(guiComp[0], 190@20, "widget : ");
 		[me.value, item]. postln;
 	});
 };
-guiWidget.setColors(
-	Color.black.alpha_(0.25), Color.grey(0.95),
-	Color.black.alpha_(0.25), Color.black);
+//guiWidget.setColors(
+//	Color.black.alpha_(0.25), Color.grey(0.95),
+//	Color.black.alpha_(0.25), Color.black);
 guiWidget.value=0;
 
 guiGrid= EZPopUpMenu.new(guiComp[0], 150@20, "grid : ");
 [ "4", "6", "8", "12", "16", "24", "32" ].do{|item, i|
 	guiGrid.addItem(item, {item. postln});
 };
-guiGrid.setColors(
-	Color.black.alpha_(0.25), Color.grey(0.95),
-	Color.black.alpha_(0.25), Color.black);
+//guiGrid.setColors(
+//	Color.black.alpha_(0.25), Color.grey(0.95),
+//	Color.black.alpha_(0.25), Color.black);
 guiGrid.value=4;
 
 guiComp[0].decorator.shift(350, 0);
