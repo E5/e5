@@ -16,7 +16,6 @@ It's the big boss file.
 	"e5_data.scd",
 ].do(_.loadRelative);
 
-//<<<<<<< HEAD
 ~data.global.gen= [];
 ~data.global.mod= [];
 SynthDescLib.global.synthDescs.keys.asArray.sort.do{|item, i|
