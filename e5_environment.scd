@@ -231,11 +231,11 @@ tmp.do{|item, i|
 guiGen.value=0;
 
 guiComp[0]= CompositeView.new(c, c.bounds.width-8@100)
-	.background_(Color.rand.alpha_(0.5));
+	.background_(Color.red/*rand*/.alpha_(0.5));
 guiComp[0].addFlowLayout;
 
 guiComp[1]= CompositeView.new(c, c.bounds.width-8@100)
-	.background_(Color.rand.alpha_(0.5));
+	.background_(Color.blue/*rand*/.alpha_(0.5));
 guiComp[1].addFlowLayout;
 
 guiWidget= EZPopUpMenu.new(guiComp[0], 190@20, "widget : ");
