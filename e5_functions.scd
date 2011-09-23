@@ -78,7 +78,7 @@ This file contains most of the functions used by E5.
 
 	~f_macroMenu.value(layout, seq);
 
-	seq
+//	seq
 };
 
 ~f_macroMenu= {|layout, seq|
@@ -89,17 +89,17 @@ This file contains most of the functions used by E5.
 
 	g = EZPopUpMenu.new(layout, 300@20, "macros : ");
 	[
-		["execute...", {"execute...". postln;}]
-		["-", {}]
-		["shift left", {"shift left". postln;}]
-		["shift right", {"shift right". postln;}]
-		["All min", {"All min". postln;}]
-		["All max", {"All max". postln;}]
-		["Randomise all", {"Randomise all". postln;}]
-		["Randomise non-quarter notes", {"Randomise non-quarter notes". postln;}]
-		["Vary", {"Vary". postln;}]
-		["-", {}]
-		["new...", {"new...". postln;}]
+		["execute...", {"execute...". postln;}],
+		["-", {}],
+		["shift left", {"shift left". postln;}],
+		["shift right", {"shift right". postln;}],
+		["All min", {"All min". postln;}],
+		["All max", {"All max". postln;}],
+		["Randomise all", {"Randomise all". postln;}],
+		["Randomise non-quarter notes", {"Randomise non-quarter notes". postln;}],
+		["Vary", {"Vary". postln;}],
+		["-", {}],
+		["new...", {"new...". postln;}],
 	].do{|item, i|
 		g.addItem(item[0], item[1]/*{item. postln}*/);
 	};
@@ -107,8 +107,29 @@ This file contains most of the functions used by E5.
 		Color.black.alpha_(0.25), Color.grey(0.95),
 		Color.black.alpha_(0.25), Color.black);
 	g.value=0;
+//	layout.refresh;
 
 //	seq
+};
+
+~f_Macros= {|seq, select=0|
+	var macro, workSeq= seq.copy;
+	macro= [
+		["execute...", {"execute...". postln;}],
+		["new...", {"new...". postln;}],
+		["revert", {workSeq= seq.copy; "revert". postln;}],
+//		["-", {}],
+		["shift left", {workSeq= workSeq.rotate(-1); "shift left". postln;}],
+		["shift right", {workSeq= workSeq.rotate(1); "shift right". postln;}],
+		["All min", {workSeq= Array.fill(seq.size, {0}); "All min". postln;}],
+		["All max", {workSeq= Array.fill(seq.size, {1.0}); "All max". postln;}],
+		["Randomise all", {workSeq= Array.fill(seq.size, {1.0.rand}); "Randomise all". postln;}],
+		["Randomise non-quarter notes", {"Randomise non-quarter notes". postln;}],
+		["Vary", {workSeq= seq + Array.fill(seq.size, {0.1.rand}); "Vary". postln;}],
+//		["-", {}],
+	];
+	workSeq= macro[select][1].value;
+	workSeq
 };
 
 //~f_knobRow= {|view, seq, spec|
