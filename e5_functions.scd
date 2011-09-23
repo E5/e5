@@ -78,90 +78,30 @@ This file contains most of the functions used by E5.
 
 	~f_macroMenu.value(layout, seq);
 
-//	layout.decorator.nextLine;
-//
-//	// this 'macros' code should really be in it's own function or class.
-//	g = EZPopUpMenu.new(layout, 300@20, "macros : ");
-//	[
-//		"execute...",
-//		"-",
-//		"shift left",
-//		"shift right",
-//		"All off",
-//		"All on",
-//		"Randomise all",
-//		"Randomise non-quarter notes",
-//		"Vary",
-//		"-",
-//		"new...",
-//	].do{|item, i|
-//		g.addItem(item, {item. postln});
-//	};
-//	g.setColors(
-//		Color.black.alpha_(0.25), Color.grey(0.95),
-//		Color.black.alpha_(0.25), Color.black);
-//	g.value=0;
-
 	seq
 };
 
 ~f_macroMenu= {|layout, seq|
 	// this function draws a macro popup menu
-//	var layout, triggers;
-//	states = states ? [0, 1];
-//	seq = seq ? (Array.fill(16, {states.choose}));
-//
-//	triggers= Array.fill(seq.size);
-//
-//	layout= CompositeView(view,
-//		(view.bounds.width-8) @ 70
-//	).background_(Color.grey/*rand*/);
-//
-//	layout.addFlowLayout(0@0);
-//
-//	seq.size.do{|i|
-//		var x;
-//		triggers[i]= SmoothButton.new(layout, 32 @ 32)
-//			.radius_(10)
-//			.canFocus_(false)
-//			.border_(3)
-//			.action_{|me|
-//					seq[i]= me.value;
-//					seq.postln;
-//				}
-//			.value_(seq[i]);
-//		if (i%4 == 0, {
-//			triggers[i].states_([
-//				[\none, Color.grey(0.1), Color.grey(0.85).alpha_(0.25)],
-//				[\record, Color.grey(0.1), Color.grey(0.85).alpha_(0.25)],
-//			])
-//			},{
-//			triggers[i].states_([
-//				[\none, Color.grey(0.1), Color.white.alpha_(0.4)],
-//				[\record, Color.grey(0.1), Color.white.alpha_(0.4)],
-//			])
-//			});
-//		
-//		};
+	var workSeq= seq.copy;
 
 	layout.decorator.nextLine;
 
-	// this 'macros' code should really be in it's own function or class.
 	g = EZPopUpMenu.new(layout, 300@20, "macros : ");
 	[
-		"execute...",
-		"-",
-		"shift left",
-		"shift right",
-		"All off",
-		"All on",
-		"Randomise all",
-		"Randomise non-quarter notes",
-		"Vary",
-		"-",
-		"new...",
+		["execute...", {"execute...". postln;}]
+		["-", {}]
+		["shift left", {"shift left". postln;}]
+		["shift right", {"shift right". postln;}]
+		["All min", {"All min". postln;}]
+		["All max", {"All max". postln;}]
+		["Randomise all", {"Randomise all". postln;}]
+		["Randomise non-quarter notes", {"Randomise non-quarter notes". postln;}]
+		["Vary", {"Vary". postln;}]
+		["-", {}]
+		["new...", {"new...". postln;}]
 	].do{|item, i|
-		g.addItem(item, {item. postln});
+		g.addItem(item[0], item[1]/*{item. postln}*/);
 	};
 	g.setColors(
 		Color.black.alpha_(0.25), Color.grey(0.95),
@@ -219,4 +159,5 @@ This file contains most of the functions used by E5.
 "\t~f_placeWindow".postln;
 "\t~f_createPart".postln;
 "\t~f_beatboxRow".postln;
+"\t~f_macroMenu".postln;
 ""
