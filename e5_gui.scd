@@ -38,12 +38,23 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
+var guiDisloser;
+
 w= Window.new("", Rect(318, 650, 832, 206)).front;
 
-f= FlowView(w, Rect(8, 8, 816, 40), 8@8, 4@8)
-	.background_(Color.rand.alpha_(0.2));
+f= FlowView(w, Rect(8, 8, 776, 32), 4@4/*, 4@8*/)
+	.background_(Color.blue.alpha_(0.2));
 
 b=[];
+
+guiDisloser= SmoothButton.new(f, 24@24)
+	.states_([
+		[ \triangle, Color.grey(0.1), Color.clear ],
+		[ \down, Color.grey(0.1), Color.clear ], ])
+	.action_{|me| }
+	.radius_(3)
+	.border_(0)
+	.focusColor_(Color.clear);
 
 PopUpMenu.new(f, 144@24)
 	.items_(["kick", "snare", "hh", "er perc-1"])
@@ -65,7 +76,7 @@ SmoothButton.new(f, 24@24)
 	.radius_(3)
 	.focusColor_(Color.clear);
 
-f.decorator.shift(32, 0);
+//f.decorator.shift(32, 0);
 
 16.do {|i|
 	SmoothButton.new(f, 24@24)
@@ -79,7 +90,7 @@ f.decorator.shift(32, 0);
 //	f.decorator.shift(-4,0);
 };
 
-f.decorator.shift(0, 6);
+//f.decorator.shift(0, 6);
 
 // selection button (radio)
 b= b.add(SmoothButton.new(f, 12@12)
@@ -91,7 +102,7 @@ b= b.add(SmoothButton.new(f, 12@12)
 	.border_(1);
 );
 
-f.decorator.shift(32, -6);
+//f.decorator.shift(32, -6);
 
 ["+", "-", "=", "!"].do {|item|
 	SmoothButton.new(f, 20@24)
@@ -109,7 +120,9 @@ f.decorator.shift(32, -6);
 		.items_(["probability", "volume", "pan", "-", "lp cutoff",
 			"hp cutoff", "reverb", "delay", "-"])
 		.focusColor_(Color.clear);
-	f.decorator.shift(60, 0);
+
+	f.decorator.shift(28, 0);
+
 	a= MultiSliderView.new(f, 444/*16*13+2*/@24)
 		.value_(Array.fill(16, {|v| v*0.05}))
 		.action_{|me| }
@@ -119,7 +132,7 @@ f.decorator.shift(32, -6);
 		.thumbSize_(34)
 		.valueThumbSize_(2);
 
-	f.decorator.shift(0, 6);
+//	f.decorator.shift(0, 6);
 
 	// selection button (radio)
 	b= b.add(SmoothButton.new(f, 12@12)
@@ -145,7 +158,7 @@ var	guiView, guiOut, guiBufnum, guiAmp, guiStartPos, guiLoop, guiRate,
 	guiLength, guiPanPos, guiCmpGain, guiCmpThresh, guiCmpAtk, guiCmpRel,
 	guiCmpSlopeBelow, guiCmpSlopeAbove, guiEnv, guiLayout, guiWidget;
 
-w= Window("E5:PartName:playbuf", Rect(741, 398, 536, 279)).front;
+w= Window("", Rect(741, 398, 536, 279)).front;
 w.addFlowLayout;
 
 guiOut= EZPopUpMenu(w, 140@20, "out:", labelWidth: 40)
