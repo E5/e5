@@ -2,7 +2,7 @@
 
 E5 Environment
 
-This file sets up the E5 gui. It will call the other files too.
+This file sets up the E5 environment. It will call the other files too.
 It's the big boss file.
 
 *******************************************************************************/
