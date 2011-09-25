@@ -143,9 +143,9 @@ f.resizeToFit(false,true);
 
 var	guiView, guiOut, guiBufnum, guiAmp, guiStartPos, guiLoop, guiRate,
 	guiLength, guiPanPos, guiCmpGain, guiCmpThresh, guiCmpAtk, guiCmpRel,
-	guiCmpSlopeBelow, guiCmpSlopeAbove, guiEnv, guiLayout;
+	guiCmpSlopeBelow, guiCmpSlopeAbove, guiEnv, guiLayout, guiWidget;
 
-w= Window("E5:PartName:playbuf", Rect(741, 363, 525, 314)).front;
+w= Window("E5:PartName:playbuf", Rect(741, 398, 536, 279)).front;
 w.addFlowLayout;
 
 guiOut= EZPopUpMenu(w, 140@20, "out:", labelWidth: 40)
@@ -165,86 +165,54 @@ guiLoop= SmoothButton(w, 20@20)
 
 w.view.decorator.nextLine;
 
-guiLayout= FlowView(w, /*328*/352@120/*, 4@4, 4@4*/).background_(Color.blue.alpha_(0.2)/*rand.alpha_(0.2)*/);
+guiLayout= CompositeView(w, 364@127).background_(Color.blue.alpha_(0.2));
+guiLayout.addFlowLayout(4@4, 4@4);
 
-StaticText(guiLayout, 342@20)
+StaticText(guiLayout, 356@20)
 	.string_("controls")
 	.stringColor_(Color.white)
 	.background_(Color.black.alpha_(0.7))
 	.font_(Font("Monaco", 9))
 	.align_(\center);
 
-guiLayout.startRow;
+guiLayout.decorator.nextLine;
 
 ["amp", "start", "rate", "length", "pan"].do{|label, i|
-	// flow within a flow
-	g = guiLayout.flow({|g|
-		StaticText(g, 60@11)
-			.string_(label)
-			.background_(Color.white.alpha_(0.5))
-			.font_(Font("MINI7Tight", 7))
-			.align_(\center)
-			.action_{|me| };
-//		ActionButton(g,"a");
-//		GUI.slider.new(g,Rect(0,0,100,100)).background_(Color.rand);
-		g.startRow;
-		guiAmp= Knob(g, 58@53)
-			.action_{|me| };
-		guiAmp.color[0] = Color.grey;
-		g.startRow;
-//		g.decorator.shift(4, 0);
-		SmoothNumberBox(g, 60@15)
-			.value_(1.0)
-			.stringColor_(Color.green)
-			.normalColor_(Color.green)
-			.background_(Color.black)
-			.font_(Font("Monaco", 9))
-			.align_(\center)
-			.action_({|me| me.value.postln; })
-			.radius_(3);
-		g.startRow;
-//	g.decorator.shift(8, 0);
-	})/*.background_(Color.red)*/;
-		// shrinks to fit the contents afterwards
+	guiWidget= CompositeView(guiLayout, 68@95)
+		.background_(Color.blue.alpha_(0.2));
+	guiWidget.addFlowLayout;
 
-//	StaticText(guiLayout, 60@11)
-//		.string_(label)
-//		.background_(Color.white.alpha_(0.5))
-//		.font_(Font("MINI7Tight", 7))
-//		.align_(\center)
-//		.action_{|me| };
+	StaticText(guiWidget, 60@11)
+		.string_(label)
+		.background_(Color.white.alpha_(0.5))
+		.font_(Font("MINI7Tight", 7))
+		.align_(\center)
+		.action_{|me| };
+
+	guiWidget.decorator.nextLine;
+
+	guiAmp= Knob(guiWidget, 60@53)
+		.action_{|me| };
+	guiAmp.color[0] = Color.grey;
+
+	guiWidget.decorator.nextLine;
+
+	SmoothNumberBox(guiWidget, 60@15)
+		.value_(1.0)
+		.stringColor_(Color.green)
+		.normalColor_(Color.green)
+		.background_(Color.black)
+		.font_(Font("Monaco", 9))
+		.align_(\center)
+		.action_({|me| me.value.postln; })
+		.radius_(0);
+
+	guiWidget.decorator.nextLine;
 };
 
-//g.resizeToFit(false, true);
-//guiLayout.startRow;
-//
-//5.do{
-//	guiAmp= Knob(guiLayout, 60@53)
-//		.action_{|me| };
-//	guiAmp.color[0] = Color.grey;
-//};
-
-//guiLayout.startRow;
-
-//guiLayout.decorator.shift(4, 0);
-//
-//5.do{
-//	SmoothNumberBox(guiLayout, 52@15)
-//		.value_(1.0)
-//		.stringColor_(Color.green)
-//		.normalColor_(Color.green)
-//		.background_(Color.black)
-//		.font_(Font("Monaco", 9))
-//		.align_(\center)
-//		.action_({|me| me.value.postln; })
-//		.radius_(3);
-//
-//	guiLayout.decorator.shift(8, 0);
-//};
-
-guiLayout.resizeToFit(false, true);
-
-guiLayout= FlowView(w, 160@120, 4@4, 4@4).background_(Color.blue.alpha_(0.2)/*rand.alpha_(0.2)*/);
+guiLayout= CompositeView(w, 160@127)
+	.background_(Color.blue.alpha_(0.2));
+guiLayout.addFlowLayout(4@4, 4@4);
 
 StaticText(guiLayout, 152@20)
 	.string_("envelope")
@@ -253,50 +221,48 @@ StaticText(guiLayout, 152@20)
 	.font_(Font("Monaco", 9))
 	.align_(\center);
 
-guiLayout.startRow;
+guiLayout.decorator.nextLine;
 
-guiEnv= EnvelopeView(guiLayout, 152@83)
+guiEnv= EnvelopeView(guiLayout, 152@95)
 	.action_{|me| [me.index, me.value].postln;}
 	.value_([[0.0, 0.15, 0.5, 1.0], [0.1, 1.0, 0.7, 0.0]])
 	.curves_([5, 5, -5]);
 
-guiLayout.resizeToFit(false, true);
-
 w.view.decorator.nextLine;
 
-guiLayout= FlowView(w, 328@111, 4@4, 4@4).background_(Color.blue.alpha_(0.2)/*rand.alpha_(0.2)*/);
+guiLayout= CompositeView(w, 364@116)
+	.background_(Color.blue.alpha_(0.2));
+guiLayout.addFlowLayout(4@4, 4@4);
 
-StaticText(guiLayout, 316@20)
+StaticText(guiLayout, 356@20)
 	.string_("compressor")
 	.stringColor_(Color.white)
 	.background_(Color.black.alpha_(0.7))
 	.font_(Font("Monaco", 9))
 	.align_(\center);
 
-guiLayout.startRow;
+guiLayout.decorator.nextLine;
 
 ["gain", "thresh", "attack", "release", "below", "above"].do{|label, i|
-	StaticText(guiLayout, 50@11)
+	guiWidget= CompositeView(guiLayout, 56@84)
+		.background_(Color.blue.alpha_(0.2));
+	guiWidget.addFlowLayout;
+
+	StaticText(guiWidget, 48@11)
 		.string_(label)
 		.background_(Color.white.alpha_(0.5))
 		.font_(Font("MINI7Tight", 7))
 		.align_(\center);
-};
 
-guiLayout.startRow;
+	guiWidget.decorator.nextLine;
 
-6.do{
-	guiCmpGain= Knob(guiLayout, 50@53)
+	guiCmpGain= Knob(guiWidget, 48@53)
 		.action_{|me| };
 	guiCmpGain.color[0] = Color.grey;
-};
 
-guiLayout.startRow;
+	guiWidget.decorator.nextLine;
 
-guiLayout.decorator.shift(4, 0);
-
-6.do{
-	SmoothNumberBox(guiLayout, 42@15)
+	SmoothNumberBox(guiWidget, 48@15)
 		.value_(1.0)
 		.stringColor_(Color.green)
 		.normalColor_(Color.green)
@@ -304,10 +270,6 @@ guiLayout.decorator.shift(4, 0);
 		.font_(Font("Monaco", 9))
 		.align_(\center)
 		.action_({|me| me.value.postln; });
-
-	guiLayout.decorator.shift(8, 0);
 };
-
-guiLayout.resizeToFit(false, true);
 
 )
