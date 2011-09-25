@@ -39,8 +39,10 @@ design here, without cluttering up my main file.
 // Designing a drum machine gui
 
 w= Window.new("", Rect(318, 650, 832, 206)).front;
+
 f= FlowView(w, Rect(8, 8, 816, 40), 8@8, 4@8)
 	.background_(Color.rand.alpha_(0.2));
+
 b=[];
 
 PopUpMenu.new(f, 144@24)
@@ -129,6 +131,7 @@ f.decorator.shift(32, -6);
 		.border_(1);
 	);
 };
+
 f.resizeToFit(false,true);
 
 )
@@ -148,63 +151,54 @@ w.addFlowLayout;
 guiOut= EZPopUpMenu(w, 140@20, "out:", labelWidth: 40)
 	.action_{|me| };
 guiOut.labelView.font_(Font("Monaco", 9));
+
 guiBufnum= EZPopUpMenu(w, 160@20, "sample:", labelWidth: 50)
 	.action_{|me| };
 guiBufnum.labelView.font_(Font("Monaco", 9));
-guiLoop= SmoothButton(w, 40@20)
+
+guiLoop= SmoothButton(w, 20@20)
 	.states_([
-		["loop", Color.black, Color.white], 
-		["loop", Color.white, Color.black] ])
+		[\roundArrow, Color.black, Color.white], 
+		[\roundArrow, Color.white, Color.black] ])
 	.radius_(1)
 	.action_{|me| };
+
 w.view.decorator.nextLine;
 
-/******************************************************************************/
+guiLayout= FlowView(w, 328@120, 4@4, 4@4).background_(Color.rand.alpha_(0.2));
 
-guiLayout= FlowView(w, 328@120, 0@0, 0@4).background_(Color.rand);
-//guiLayout.addFlowLayout(0@0);
-StaticText(guiLayout, 300@20)
+StaticText(guiLayout, 316@20)
 	.string_("controls")
 	.stringColor_(Color.white)
 	.background_(Color.black.alpha_(0.7))
 	.font_(Font("Monaco", 9))
 	.align_(\center);
-//guiLayout.decorator.margin_(4@4).nextLine.shift(2,0);
+
 guiLayout.startRow;
+
 ["amp", "start", "rate", "length", "pan"].do{|label, i|
 	StaticText(guiLayout, 60@11)
 		.string_(label)
-//		.background_(Color.white.alpha_(0.5))
+		.background_(Color.white.alpha_(0.5))
 		.font_(Font("MINI7Tight", 7))
 		.align_(\center)
 		.action_{|me| };
 };
+
 guiLayout.startRow;
-//guiLayout.decorator.nextLine.shift(2, 0);
+
 5.do{
 	guiAmp= Knob(guiLayout, 60@53)
 		.action_{|me| };
+	guiAmp.color[0] = Color.grey;
 };
-//guiAmp= Knob(guiLayout, 60@53)
-//	.action_{|me| };
-//guiAmp.color[0] = Color.clear;
-//guiStartPos= Knob(guiLayout, 60@53)
-//	.action_{|me| };
-//guiStartPos.color[0] = Color.clear;
-//guiRate= Knob(guiLayout, 60@53)
-//	.action_{|me| };
-//guiRate.color[0] = Color.clear;
-//guiLength= Knob(guiLayout, 60@53)
-//	.action_{|me| };
-//guiLength.color[0] = Color.clear;
-//guiPanPos= Knob(guiLayout, 60@53)
-//	.action_{|me| };
-//guiPanPos.color[0] = Color.clear;
+
 guiLayout.startRow;
-//guiLayout.decorator.nextLine;
-guiLayout.decorator.shift(14, 0);
+
+guiLayout.decorator.shift(4, 0);
+
 5.do{
-	SmoothNumberBox(guiLayout, 34@15)
+	SmoothNumberBox(guiLayout, 52@15)
 		.value_(1.0)
 		.stringColor_(Color.green)
 		.normalColor_(Color.green)
@@ -213,71 +207,76 @@ guiLayout.decorator.shift(14, 0);
 		.align_(\center)
 		.action_({|me| me.value.postln; })
 		.radius_(3);
-	guiLayout.decorator.shift(26, 0);
+
+	guiLayout.decorator.shift(8, 0);
 };
 
 guiLayout.resizeToFit(false, true);
 
-/******************************************************************************/
+guiLayout= FlowView(w, 160@120, 4@4, 4@4).background_(Color.rand.alpha_(0.2));
 
-//guiLayout= CompositeView(w, 160@120).background_(Color.rand);
-//guiLayout.addFlowLayout(0@0);
-//StaticText(guiLayout, 160@20)
-//	.string_("envelope")
-//	.stringColor_(Color.white)
-//	.background_(Color.black.alpha_(0.7))
-//	.align_(\center);
-//guiLayout.decorator.margin_(4@4).nextLine;
-//guiEnv= EnvelopeView(guiLayout, 152@91)
-//	.action_{|me| };
-//
-///******************************************************************************/
-//
-//w.view.decorator.nextLine;
-//guiLayout= CompositeView(w, 328@111).background_(Color.rand);
-//guiLayout.addFlowLayout(0@0);
-//StaticText(guiLayout, 328@20)
-//	.string_("compressor")
-//	.stringColor_(Color.white)
-//	.background_(Color.black.alpha_(0.7))
-//	.align_(\center);
-//guiLayout.decorator.margin_(4@4).nextLine;
-//["gain", "thresh", "attack", "release", "below", "above"].do{|label, i|
-//	StaticText(guiLayout, 50@11)
-//		.string_(label)
-//		.background_(Color.white.alpha_(0.5))
-//		.font_(Font("MINI7Tight", 7))
-//		.align_(\center);
-//};
-//guiLayout.decorator.nextLine;
-//guiCmpGain= Knob(guiLayout, 50@44)
-//	.action_{|me| };
-//guiCmpGain.color[0] = Color.clear;
-//guiCmpThresh= Knob(guiLayout, 50@44)
-//	.action_{|me| };
-//guiCmpThresh.color[0] = Color.clear;
-//guiCmpAtk= Knob(guiLayout, 50@44)
-//	.action_{|me| };
-//guiCmpAtk.color[0] = Color.clear;
-//guiCmpRel= Knob(guiLayout, 50@44)
-//	.action_{|me| };
-//guiCmpRel.color[0] = Color.clear;
-//guiCmpSlopeBelow= Knob(guiLayout, 50@44)
-//	.action_{|me| };
-//guiCmpSlopeBelow.color[0] = Color.clear;
-//guiCmpSlopeAbove= Knob(guiLayout, 50@44)
-//	.action_{|me| };
-//guiCmpSlopeAbove.color[0] = Color.clear;
-//guiLayout.decorator.nextLine;
-//6.do{
-//	SmoothNumberBox(guiLayout, 50@20)
-//		.value_(1.0)
-//		.stringColor_(Color.green)
-//		.normalColor_(Color.green)
-//		.background_(Color.black)
-//		.font_(Font("Monaco", 9))
-//		.align_(\center)
-//		.action_({|me| me.value.postln; });
-//};
+StaticText(guiLayout, 152@20)
+	.string_("envelope")
+	.stringColor_(Color.white)
+	.background_(Color.black.alpha_(0.7))
+	.font_(Font("Monaco", 9))
+	.align_(\center);
+
+guiLayout.startRow;
+
+guiEnv= EnvelopeView(guiLayout, 152@83)
+	.action_{|me| [me.index, me.value].postln;}
+	.value_([[0.0, 0.15, 0.5, 1.0], [0.1, 1.0, 0.7, 0.0]])
+	.curves_([5, 5, -5]);
+
+guiLayout.resizeToFit(false, true);
+
+w.view.decorator.nextLine;
+
+guiLayout= FlowView(w, 328@111, 4@4, 4@4).background_(Color.rand.alpha_(0.2));
+
+StaticText(guiLayout, 316@20)
+	.string_("compressor")
+	.stringColor_(Color.white)
+	.background_(Color.black.alpha_(0.7))
+	.font_(Font("Monaco", 9))
+	.align_(\center);
+
+guiLayout.startRow;
+
+["gain", "thresh", "attack", "release", "below", "above"].do{|label, i|
+	StaticText(guiLayout, 50@11)
+		.string_(label)
+		.background_(Color.white.alpha_(0.5))
+		.font_(Font("MINI7Tight", 7))
+		.align_(\center);
+};
+
+guiLayout.startRow;
+
+6.do{
+	guiCmpGain= Knob(guiLayout, 50@53)
+		.action_{|me| };
+	guiCmpGain.color[0] = Color.grey;
+};
+
+guiLayout.startRow;
+
+guiLayout.decorator.shift(4, 0);
+
+6.do{
+	SmoothNumberBox(guiLayout, 42@15)
+		.value_(1.0)
+		.stringColor_(Color.green)
+		.normalColor_(Color.green)
+		.background_(Color.black)
+		.font_(Font("Monaco", 9))
+		.align_(\center)
+		.action_({|me| me.value.postln; });
+
+	guiLayout.decorator.shift(8, 0);
+};
+
+guiLayout.resizeToFit(false, true);
 
 )
