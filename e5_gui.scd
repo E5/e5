@@ -115,39 +115,51 @@ b= b.add(SmoothButton.new(f, 12@12)
 
 1.do { // this loop is just for testing the f.resizeToFit
 	f.startRow;
-	PopUpMenu.new(f, 144@24)
-		.action_{|me| }
-		.items_(["probability", "volume", "pan", "-", "lp cutoff",
-			"hp cutoff", "reverb", "delay", "-"])
-		.focusColor_(Color.clear);
-
-	f.decorator.shift(28, 0);
-
-	a= MultiSliderView.new(f, 444/*16*13+2*/@24)
-		.value_(Array.fill(16, {|v| v*0.05}))
-		.action_{|me| }
-		.focusColor_(Color.clear);
-	a.elasticMode_(1)
-//		.indexThumbSize_(32)
-		.thumbSize_(34)
-		.valueThumbSize_(2);
-
-//	f.decorator.shift(0, 6);
-
-	// selection button (radio)
-	b= b.add(SmoothButton.new(f, 12@12)
-		.states_([
-			[ \none, Color.grey(0.1), Color.clear ],
-			[ \none, Color.clear, Color.grey(0.1) ] ])
-		.action_{|me| }
-		.focusColor_(Color.clear)
-		.border_(1);
-	);
+	f.decorator.shift(29, 0);
+	g= f.comp({|g|
+		g.addFlowLayout(0@0);
+//			f.startRow;
+			PopUpMenu.new(g, 144@24)
+				.action_{|me| }
+				.items_(["probability", "volume", "pan", "-", "lp cutoff",
+					"hp cutoff", "reverb", "delay", "-"])
+				.focusColor_(Color.clear);
+		
+			g.decorator.shift(28, 0);
+		
+			a= MultiSliderView.new(g, 444/*16*13+2*/@24)
+				.value_(Array.fill(16, {|v| v*0.05}))
+				.action_{|me| }
+				.focusColor_(Color.clear);
+			a.elasticMode_(1)
+//				.indexThumbSize_(32)
+				.thumbSize_(34)
+				.valueThumbSize_(2);
+		
+//			f.decorator.shift(0, 6);
+		
+			// selection button (radio)
+			b= b.add(SmoothButton.new(g, 12@12)
+				.states_([
+					[ \none, Color.grey(0.1), Color.clear ],
+					[ \none, Color.clear, Color.grey(0.1) ] ])
+				.action_{|me| }
+				.focusColor_(Color.clear)
+				.border_(1);
+			);
+		},
+		640@24
+	).background_(Color.red);
 };
 
+//g.visible_(false);
 f.resizeToFit(false,true);
 
 )
+
+//a.remove;
+//g.children.do(_.remove);
+//g.refresh;
 
 /******************************************************************************/
 
