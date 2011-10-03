@@ -38,11 +38,20 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var guiDisloser;
+var guiDisloser, subControlRows=0, guiPlus, guiMinus;
 
-w= Window.new("", Rect(318, 650, 832, 206)).front;
+q= ();
+q.drumPart= ();
+q.drumPart.row1= ();
+q.drumPart.row1.instrument= "whatever";
+q.drumPart.row1.length= 16;
+q.drumPart.row1.beat= {2.rand} ! q.drumPart.row1.length;
+q.drumPart.row1.subControlRow= [];
+//q.test=[23];
 
-f= FlowView(w, Rect(8, 8, 776, 32), 4@4/*, 4@8*/)
+w= Window.new("", Rect(318, 662, 856, 194)).front;
+
+f= FlowView(w, Rect(8, 8, 830, 32), 4@4/*, 4@8*/)
 	.background_(Color.blue.alpha_(0.2));
 
 b=[];
@@ -106,14 +115,26 @@ b= b.add(SmoothButton.new(f, 12@12)
 
 ["+", "-", "=", "!"].do {|item|
 	SmoothButton.new(f, 20@24)
-		.states_([
-			[ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me| }
 		.radius_(3)
 		.focusColor_(Color.clear);
 };
 
-1.do { // this loop is just for testing the f.resizeToFit
+guiPlus= SmoothButton.new(f, 24@24)
+	.states_([ [ '+', Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+	.action_{|me| }
+	.radius_(3)
+	.focusColor_(Color.clear);
+
+guiMinus= SmoothButton.new(f, 24@24)
+	.states_([ [ '-', Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+	.action_{|me| }
+	.radius_(3)
+	.focusColor_(Color.clear);
+guiMinus.enabled= false;
+
+subControlRows.do { // this loop is just for testing the f.resizeToFit
 	f.startRow;
 	f.decorator.shift(29, 0);
 	g= f.comp({|g|
