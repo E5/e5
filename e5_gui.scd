@@ -51,41 +51,14 @@ q.drumPart.row1.subControlRow= [];
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
-f= FlowView(w, Rect(8, 8, 830, 32), 4@4/*, 4@8*/)
+f= CompositeView(w, Rect(8, 8, 830, 150), 4@4/*, 4@8*/)
 	.background_(Color.blue.alpha_(0.2));
-
-b=[];
-
-guiDisloser= SmoothButton.new(f, 24@24)
-	.states_([
-		[ \triangle, Color.grey(0.1), Color.clear ],
-		[ \down, Color.grey(0.1), Color.clear ], ])
-	.action_{|me| }
-	.radius_(3)
-	.border_(0)
-	.focusColor_(Color.clear);
+f.addFlowLayout;
 
 PopUpMenu.new(f, 144@24)
 	.items_(["kick", "snare", "hh", "er perc-1"])
 	.action_{|me| }
 	.focusColor_(Color.clear);
-
-SmoothButton.new(f, 24@24)
-	.states_([
-		[ "E", Color.grey(0.1), Color.white.alpha_(0.67) ] ])
-	.action_{|me|
-		x= SCModalSheet.new(w, 380@70);
-		Button(x, Rect(20,20,340,30))
-			.states_([
-				["Dismiss me", Color.black, Color.red]
-			])
-			.onClose_({"Dismissed!".postln})
-			.action_({ x.close });
-	}
-	.radius_(3)
-	.focusColor_(Color.clear);
-
-//f.decorator.shift(32, 0);
 
 16.do {|i|
 	SmoothButton.new(f, 24@24)
@@ -96,22 +69,7 @@ SmoothButton.new(f, 24@24)
 		.radius_(8)
 		.focusColor_(Color.clear)
 		.value_(2.rand);
-//	f.decorator.shift(-4,0);
 };
-
-//f.decorator.shift(0, 6);
-
-// selection button (radio)
-b= b.add(SmoothButton.new(f, 12@12)
-	.states_([
-		[ \none, Color.grey(0.1), Color.clear ],
-		[ \none, Color.clear, Color.grey(0.1) ] ])
-	.action_{|me| }
-	.focusColor_(Color.clear)
-	.border_(1);
-);
-
-//f.decorator.shift(32, -6);
 
 ["+", "-", "=", "!"].do {|item|
 	SmoothButton.new(f, 20@24)
@@ -134,53 +92,57 @@ guiMinus= SmoothButton.new(f, 24@24)
 	.focusColor_(Color.clear);
 guiMinus.enabled= false;
 
-subControlRows.do { // this loop is just for testing the f.resizeToFit
-	f.startRow;
-	f.decorator.shift(29, 0);
-	g= f.comp({|g|
-		g.addFlowLayout(0@0);
-//			f.startRow;
-			PopUpMenu.new(g, 144@24)
-				.action_{|me| }
-				.items_(["probability", "volume", "pan", "-", "lp cutoff",
-					"hp cutoff", "reverb", "delay", "-"])
-				.focusColor_(Color.clear);
-		
-			g.decorator.shift(28, 0);
-		
-			a= MultiSliderView.new(g, 444/*16*13+2*/@24)
-				.value_(Array.fill(16, {|v| v*0.05}))
-				.action_{|me| }
-				.focusColor_(Color.clear);
-			a.elasticMode_(1)
-//				.indexThumbSize_(32)
-				.thumbSize_(34)
-				.valueThumbSize_(2);
-		
-//			f.decorator.shift(0, 6);
-		
-			// selection button (radio)
-			b= b.add(SmoothButton.new(g, 12@12)
-				.states_([
-					[ \none, Color.grey(0.1), Color.clear ],
-					[ \none, Color.clear, Color.grey(0.1) ] ])
-				.action_{|me| }
-				.focusColor_(Color.clear)
-				.border_(1);
-			);
-		},
-		640@24
-	).background_(Color.red);
-};
+SmoothButton.new(f, 24@24)
+	.states_([
+		[ "E", Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+	.action_{|me|
+		x= SCModalSheet.new(w, 380@70);
+		Button(x, Rect(20,20,340,30))
+			.states_([
+				["Dismiss me", Color.black, Color.red]
+			])
+			.onClose_({"Dismissed!".postln})
+			.action_({ x.close });
+	}
+	.radius_(3)
+	.focusColor_(Color.clear);
 
-//g.visible_(false);
-f.resizeToFit(false,true);
+t= TabbedView.newFlat(f, f.bounds.width-8@48/*, ["control"]*/);
+t.tabPosition_(\left).followEdges_(false).tabWidth_(144);
+t.views[0].flow({|v|
+	v.decorator.margin_(4@0);
+	a= MultiSliderView.new(v, 444/*16*13+2*/@24)
+		.value_(Array.fill(16, {|i| i*0.05}))
+		.action_{|me| }
+		.focusColor_(Color.clear);
+	a.elasticMode_(1)
+		.indexThumbSize_(32)
+		.thumbSize_(34)
+		.valueThumbSize_(2);
+
+	PopUpMenu.new(v, 144@24)
+		.action_{|me| }
+		.items_(["probability", "volume", "pan", "-", "lp cutoff",
+			"hp cutoff", "reverb", "delay", "-"])
+		.focusColor_(Color.clear);
+	v.decorator.nextLine;
+
+	["+", "-", "=", "!"].do {|item|
+		SmoothButton.new(v, 20@16)
+			.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+			.action_{|me| }
+			.radius_(3)
+			.focusColor_(Color.clear);
+	};
+});
+//t.view.visible_(false);
+
+//t.views[1].flow({|v| 
+//	GUI.button.new(w,Rect(50,50,200,100))
+//	.states_([["go to last tab"]]).action_({t.focus(2)})
+//});
 
 )
-
-//a.remove;
-//g.children.do(_.remove);
-//g.refresh;
 
 /******************************************************************************/
 
