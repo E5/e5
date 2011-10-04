@@ -38,7 +38,7 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var guiDisloser, subControlRows=0, guiPlus, guiMinus;
+var guiDisloser, numControlRows=1, guiPlus, guiMinus, tabV, f_drawTabV;
 
 q= ();
 q.drumPart= ();
@@ -46,8 +46,7 @@ q.drumPart.row1= ();
 q.drumPart.row1.instrument= "whatever";
 q.drumPart.row1.length= 16;
 q.drumPart.row1.beat= {2.rand} ! q.drumPart.row1.length;
-q.drumPart.row1.subControlRow= [];
-//q.test=[23];
+q.drumPart.row1.controlRow= [];
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
@@ -107,41 +106,69 @@ SmoothButton.new(f, 24@24)
 	.radius_(3)
 	.focusColor_(Color.clear);
 
-t= TabbedView.newFlat(f, f.bounds.width-8@48/*, ["control"]*/);
-t.tabPosition_(\left).followEdges_(false).tabWidth_(144);
-t.views[0].flow({|v|
-	v.decorator.margin_(4@0);
-	a= MultiSliderView.new(v, 444/*16*13+2*/@24)
-		.value_(Array.fill(16, {|i| i*0.05}))
-		.action_{|me| }
-		.focusColor_(Color.clear);
-	a.elasticMode_(1)
-		.indexThumbSize_(32)
-		.thumbSize_(34)
-		.valueThumbSize_(2);
+tabV= TabbedView.newFlat(f, f.bounds.width-8@48, ["volume"])
+	.tabPosition_(\left)
+	.followEdges_(false)
+	.tabWidth_(144)
+	/*.backgrounds_([Color.red,Color.blue,Color.yellow])*/;
+f_drawTabV= {|numRows|
+	if(numRows > 0, {
+		tabV.views.do(_.flow({|v|
+			v.decorator.margin_(4@0);
+			a= MultiSliderView.new(v, 444@24)
+				.value_(Array.fill(16, {|i| i*0.05}))
+				.action_{|me| }
+				.focusColor_(Color.clear);
+			a.elasticMode_(1)
+				.indexThumbSize_(32)
+				.thumbSize_(34)
+				.valueThumbSize_(2);
+		
+			PopUpMenu.new(v, 144@24)
+				.action_{|me| }
+				.items_(["probability", "volume", "pan", "-", "lp cutoff",
+					"hp cutoff", "reverb", "delay", "bitcrush", "distortion"])
+				.focusColor_(Color.clear)
+				.value_(1);
+		
+			SmoothButton.new(v, 24@24)
+				.states_([
+					[ "E", Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+				.action_{|me|
+					x= SCModalSheet.new(w, 380@70);
+					Button(x, Rect(20,20,340,30))
+						.states_([
+							["Dismiss me", Color.black, Color.red]
+						])
+						.onClose_({"Dismissed!".postln})
+						.action_({ x.close });
+				}
+				.radius_(3)
+				.focusColor_(Color.clear);
+		
+			v.decorator.nextLine;
+		
+			["+", "-", "=", "!"].do {|item|
+				SmoothButton.new(v, 20@16)
+					.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+					.action_{|me| }
+					.radius_(3)
+					.focusColor_(Color.clear);
+			};
+		});)
+	},{
+		tabV.view.visible= false;
+	});
+};
 
-	PopUpMenu.new(v, 144@24)
-		.action_{|me| }
-		.items_(["probability", "volume", "pan", "-", "lp cutoff",
-			"hp cutoff", "reverb", "delay", "-"])
-		.focusColor_(Color.clear);
-	v.decorator.nextLine;
-
-	["+", "-", "=", "!"].do {|item|
-		SmoothButton.new(v, 20@16)
-			.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
-			.action_{|me| }
-			.radius_(3)
-			.focusColor_(Color.clear);
-	};
-});
-//t.view.visible_(false);
+f_drawTabV.value(numControlRows);
 
 //t.views[1].flow({|v| 
 //	GUI.button.new(w,Rect(50,50,200,100))
 //	.states_([["go to last tab"]]).action_({t.focus(2)})
 //});
 
+//tabV.labels.postln;
 )
 
 /******************************************************************************/
