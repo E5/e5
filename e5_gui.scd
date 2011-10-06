@@ -38,7 +38,7 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var guiDisloser, numControlRows=1, guiPlus, guiMinus, tabV, f_drawTabV;
+var guiDisloser, numControlRows=2, guiPlus, guiMinus, tabV, f_drawTabV;
 
 q= ();
 q.drumPart= ();
@@ -46,13 +46,22 @@ q.drumPart.row1= ();
 q.drumPart.row1.instrument= "whatever";
 q.drumPart.row1.length= 16;
 q.drumPart.row1.beat= {2.rand} ! q.drumPart.row1.length;
-q.drumPart.row1.controlRow= [];
+q.drumPart.row1.controlRow= [('unassigned': nil)];
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
 f= CompositeView(w, Rect(8, 8, 830, 150), 4@4/*, 4@8*/)
 	.background_(Color.blue.alpha_(0.2));
 f.addFlowLayout;
+
+guiDisloser= SmoothButton.new(f, 18@18)
+	.states_([
+		[ \triangle, Color.grey(0.1), Color.clear ],
+		[ \down, Color.grey(0.1), Color.clear ], ])
+	.action_{|me| if(me.value == 0, {tabV.view.visible= false;},{tabV.view.visible= true;});}
+	.radius_(3)
+	.border_(0)
+	.focusColor_(Color.clear);
 
 PopUpMenu.new(f, 144@24)
 	.items_(["kick", "snare", "hh", "er perc-1"])
@@ -106,7 +115,9 @@ SmoothButton.new(f, 24@24)
 	.radius_(3)
 	.focusColor_(Color.clear);
 
-tabV= TabbedView.newFlat(f, f.bounds.width-8@48, ["volume"])
+f.decorator.nextLine.shift(22, 0);
+
+tabV= TabbedView.newFlat(f, f.bounds.width/*-8*/-30@48, ["volume"])
 	.tabPosition_(\left)
 	.followEdges_(false)
 	.tabWidth_(144)
@@ -169,6 +180,8 @@ f_drawTabV.value(numControlRows);
 //});
 
 //tabV.labels.postln;
+//a.keys.asArray[0]
+
 )
 
 /******************************************************************************/
