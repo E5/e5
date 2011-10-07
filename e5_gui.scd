@@ -46,13 +46,15 @@ q.drumPart.row1= ();
 q.drumPart.row1.instrument= "whatever";
 q.drumPart.row1.length= 16;
 q.drumPart.row1.beat= {2.rand} ! q.drumPart.row1.length;
-q.drumPart.row1.controlRow= [('unassigned': nil)];
+q.drumPart.row1.controlRow= (unassigned: -1);
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
 f= CompositeView(w, Rect(8, 8, 830, 150), 4@4/*, 4@8*/)
 	.background_(Color.blue.alpha_(0.2));
 f.addFlowLayout;
+
+f.bounds.postln;
 
 guiDisloser= SmoothButton.new(f, 18@18)
 	.states_([
@@ -117,7 +119,7 @@ SmoothButton.new(f, 24@24)
 
 f.decorator.nextLine.shift(22, 0);
 
-tabV= TabbedView.newFlat(f, f.bounds.width/*-8*/-30@48, ["volume"])
+tabV= TabbedView.newFlat(f, f.bounds.width/*-8*/-30@48, q.drumPart.row1.controlRow.keys.asArray/*["volume"]*/)
 	.tabPosition_(\left)
 	.followEdges_(false)
 	.tabWidth_(144)
@@ -137,10 +139,10 @@ f_drawTabV= {|numRows|
 		
 			PopUpMenu.new(v, 144@24)
 				.action_{|me| }
-				.items_(["probability", "volume", "pan", "-", "lp cutoff",
+				.items_(["unassigned", "-", "probability", "volume", "pan", "attack", "decay", "-", "lp cutoff",
 					"hp cutoff", "reverb", "delay", "bitcrush", "distortion"])
 				.focusColor_(Color.clear)
-				.value_(1);
+				.value_(0);
 		
 			SmoothButton.new(v, 24@24)
 				.states_([
@@ -173,6 +175,7 @@ f_drawTabV= {|numRows|
 };
 
 f_drawTabV.value(numControlRows);
+tabV.view.visible= false;
 
 //t.views[1].flow({|v| 
 //	GUI.button.new(w,Rect(50,50,200,100))
