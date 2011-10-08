@@ -50,7 +50,7 @@ q.drumPart.row1.controlRow= (unassigned: -1);
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
-f= CompositeView(w, Rect(8, 8, 830, 150), 4@4/*, 4@8*/)
+f= CompositeView(w, Rect(8, 8, 830, 32/*84*/), 4@4)
 	.background_(Color.blue.alpha_(0.2));
 f.addFlowLayout;
 
@@ -60,7 +60,14 @@ guiDisloser= SmoothButton.new(f, 18@18)
 	.states_([
 		[ \triangle, Color.grey(0.1), Color.clear ],
 		[ \down, Color.grey(0.1), Color.clear ], ])
-	.action_{|me| if(me.value == 0, {tabV.view.visible= false;},{tabV.view.visible= true;});}
+	.action_{|me| if(me.value == 0, {
+			tabV.view.visible= false;
+			f.bounds_(Rect(8, 8, 830, 32/*84*/));
+		},{
+			tabV.view.visible= true;
+			f.bounds_(Rect(8, 8, 830, /*32*/ 84));
+		});
+	}
 	.radius_(3)
 	.border_(0)
 	.focusColor_(Color.clear);
