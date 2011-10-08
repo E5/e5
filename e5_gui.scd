@@ -145,7 +145,16 @@ f_drawTabV= {|numRows|
 				.valueThumbSize_(2);
 		
 			PopUpMenu.new(v, 144@24)
-				.action_{|me| }
+				.action_{|me|
+					var x= tabV.activeTab, y=me.value;
+					tabV.insert(x, me.items[me.value] );
+					tabV.removeAt(x+1);
+//					y.postln;
+//					me.items[y].postln;
+					q.drumPart.row1.controlRow= (me.items[y]: []);
+//					numControlRows= numControlRows + 1;
+//					f_drawTabV.value(numControlRows);
+				}
 				.items_(["unassigned", "-", "probability", "volume", "pan", "attack", "decay", "-", "lp cutoff",
 					"hp cutoff", "reverb", "delay", "bitcrush", "distortion"])
 				.focusColor_(Color.clear)
