@@ -38,10 +38,12 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var guiDisloser, numControlRows=2, guiPlus, guiMinus, tabV, f_drawTabV;
+var guiDisloser, numControlRows=2, guiPlus, guiMinus, tabV, f_drawTabV, f_updateTabV;
 
 q= ();
 q.drumPart= ();
+q.drumPart.controls= [ "unassigned", "-", "probability", "volume", "pan", "attack", "decay", "-",
+					"lp cutoff", "hp cutoff", "reverb", "delay", "bitcrush", "distortion" ];
 q.drumPart.row1= ();
 q.drumPart.row1.instrument= "whatever";
 q.drumPart.row1.length= 16;
@@ -62,10 +64,10 @@ guiDisloser= SmoothButton.new(f, 18@18)
 		[ \down, Color.grey(0.1), Color.clear ], ])
 	.action_{|me| if(me.value == 0, {
 			tabV.view.visible= false;
-			f.bounds_(Rect(8, 8, 830, 32/*84*/));
+			f.bounds_(Rect(8, 8, 830, 32));
 		},{
 			tabV.view.visible= true;
-			f.bounds_(Rect(8, 8, 830, /*32*/ 84));
+			f.bounds_(Rect(8, 8, 830, 84));
 		});
 	}
 	.radius_(3)
@@ -111,7 +113,7 @@ guiMinus.enabled= false;
 
 SmoothButton.new(f, 24@24)
 	.states_([
-		[ "E", Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		[ \i, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 	.action_{|me|
 		x= SCModalSheet.new(w, 380@70);
 		Button(x, Rect(20,20,340,30))
@@ -126,77 +128,77 @@ SmoothButton.new(f, 24@24)
 
 f.decorator.nextLine.shift(22, 0);
 
-tabV= TabbedView.newFlat(f, f.bounds.width/*-8*/-30@48, q.drumPart.row1.controlRow.keys.asArray/*["volume"]*/)
+tabV= TabbedView.newFlat(
+	f,
+	f.bounds.width-30@48,
+	q.drumPart.row1.controlRow.keys.asArray
+)
 	.tabPosition_(\left)
 	.followEdges_(false)
-	.tabWidth_(144)
-	/*.backgrounds_([Color.red,Color.blue,Color.yellow])*/;
-f_drawTabV= {|numRows|
+	.tabWidth_(144);
+
+f_drawTabV= {|tabView, numRows, control=0|
 	if(numRows > 0, {
-		tabV.views.do(_.flow({|v|
-			v.decorator.margin_(4@0);
-			a= MultiSliderView.new(v, 444@24)
-				.value_(Array.fill(16, {|i| i*0.05}))
-				.action_{|me| }
-				.focusColor_(Color.clear);
-			a.elasticMode_(1)
-				.indexThumbSize_(32)
-				.thumbSize_(34)
-				.valueThumbSize_(2);
-		
-			PopUpMenu.new(v, 144@24)
-				.action_{|me|
-					var x= tabV.activeTab, y=me.value;
-					tabV.insert(x, me.items[me.value] );
-					tabV.removeAt(x+1);
-//					y.postln;
-//					me.items[y].postln;
-					q.drumPart.row1.controlRow= (me.items[y]: []);
-//					numControlRows= numControlRows + 1;
-//					f_drawTabV.value(numControlRows);
-				}
-				.items_(["unassigned", "-", "probability", "volume", "pan", "attack", "decay", "-", "lp cutoff",
-					"hp cutoff", "reverb", "delay", "bitcrush", "distortion"])
-				.focusColor_(Color.clear)
-				.value_(0);
-		
-			SmoothButton.new(v, 24@24)
-				.states_([
-					[ "E", Color.grey(0.1), Color.white.alpha_(0.67) ] ])
-				.action_{|me|
-					x= SCModalSheet.new(w, 380@70);
-					Button(x, Rect(20,20,340,30))
-						.states_([
-							["Dismiss me", Color.black, Color.red]
-						])
-						.onClose_({"Dismissed!".postln})
-						.action_({ x.close });
-				}
-				.radius_(3)
-				.focusColor_(Color.clear);
-		
-			v.decorator.nextLine;
-		
-			["+", "-", "=", "!"].do {|item|
-				SmoothButton.new(v, 20@16)
-					.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		tabView.views.do({|tab, i|
+			tab.flow({|v|
+				v.decorator.margin_(4@0);
+				a= MultiSliderView.new(v, 444@24)
+					.value_(Array.fill(16, {|i| i*0.05}))
 					.action_{|me| }
+					.focusColor_(Color.clear);
+				a.elasticMode_(1)
+					.indexThumbSize_(32)
+					.thumbSize_(34)
+					.valueThumbSize_(2);
+			
+				PopUpMenu.new(v, 144@24)
+					.action_{|me|
+						f_updateTabV.value(tabView, i, tabView.activeTab, me.value);
+					}
+					.items_(q.drumPart.controls)
+					.focusColor_(Color.clear)
+					.value_(control);
+			
+				SmoothButton.new(v, 24@24)
+					.states_([
+						[ \i, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+					.action_{|me|
+						x= SCModalSheet.new(w, 380@70);
+						Button(x, Rect(20,20,340,30))
+							.states_([
+								["Dismiss me", Color.black, Color.red]
+							])
+							.onClose_({"Dismissed!".postln})
+							.action_({ x.close });
+					}
 					.radius_(3)
 					.focusColor_(Color.clear);
-			};
-		});)
+			
+				v.decorator.nextLine;
+			
+				["+", "-", "=", "!"].do {|item|
+					SmoothButton.new(v, 20@16)
+						.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+						.action_{|me| }
+						.radius_(3)
+						.focusColor_(Color.clear);
+				};
+		});})
 	},{
-		tabV.view.visible= false;
+		tabView.view.visible= false;
 	});
 };
 
-f_drawTabV.value(numControlRows);
-tabV.view.visible= false;
+f_updateTabV= {|view, row, activeTab, control|
+	view.insert(activeTab, q.drumPart.controls[control] );
+	view.removeAt(activeTab + 1);
+	view.activeTab.postln;
+	q.drumPart.row1.controlRow= (q.drumPart.controls[control]: []);
+	f_drawTabV.value(view, numControlRows, control);
+};
 
-//t.views[1].flow({|v| 
-//	GUI.button.new(w,Rect(50,50,200,100))
-//	.states_([["go to last tab"]]).action_({t.focus(2)})
-//});
+f_drawTabV.value(tabV, numControlRows);
+tabV.view.visible= false;
 
 //tabV.labels.postln;
 //a.keys.asArray[0]
