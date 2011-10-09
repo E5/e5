@@ -41,14 +41,24 @@ design here, without cluttering up my main file.
 var guiDisloser, numControlRows=2, guiPlus, guiMinus, tabV, f_drawTabV, f_updateTabV;
 
 q= ();
-q.drumPart= ();
-q.drumPart.controls= [ "unassigned", "-", "probability", "volume", "pan", "attack", "decay", "-",
-					"lp cutoff", "hp cutoff", "reverb", "delay", "bitcrush", "distortion" ];
-q.drumPart.row1= ();
-q.drumPart.row1.instrument= "whatever";
-q.drumPart.row1.length= 16;
-q.drumPart.row1.beat= {2.rand} ! q.drumPart.row1.length;
-q.drumPart.row1.controlRow= (unassigned: -1);
+q.beatBox= ();
+q.beatBox.instruments= ["kick", "snare", "hh", "er perc-1"];
+q.beatBox.controls= [ "probability", "volume", "pan", "attack", "decay", "lp cutoff",
+					"hp cutoff", "reverb", "delay", "bitcrush", "distortion" ];
+q.beatBox.numRows= 3;
+q.beatBox.row= [];
+//q.beatBox.row[0].instrument= 0;
+//q.beatBox.row[0].length= 16;
+//q.beatBox.row[0].beat= {2.rand} ! q.beatBox.row[0].length;
+//q.beatBox.row[0].controlRow= (unassigned: -1);
+
+q.beatBox.numRows.do{|i|
+	q.beatBox.row= q.beatBox.row.add(());
+	q.beatBox.row[i].instrument= i;
+	q.beatBox.row[i].length= 16;
+	q.beatBox.row[i].beat= {2.rand} ! q.beatBox.row[i].length;
+	q.beatBox.row[i].controlRow= (control: 0, data: 1.0 ! q.beatBox.row[i].length);
+};
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
@@ -75,7 +85,8 @@ guiDisloser= SmoothButton.new(f, 18@18)
 	.focusColor_(Color.clear);
 
 PopUpMenu.new(f, 144@24)
-	.items_(["kick", "snare", "hh", "er perc-1"])
+	.items_(q.beatBox.instruments)
+//	.items_(["kick", "snare", "hh", "er perc-1"])
 	.action_{|me| }
 	.focusColor_(Color.clear);
 
@@ -131,7 +142,7 @@ f.decorator.nextLine.shift(22, 0);
 tabV= TabbedView.newFlat(
 	f,
 	f.bounds.width-30@48,
-	q.drumPart.row1.controlRow.keys.asArray
+	q.beatBox.row[0].controlRow.keys.asArray
 )
 	.tabPosition_(\left)
 	.followEdges_(false)
@@ -155,7 +166,7 @@ f_drawTabV= {|tabView, numRows, control=0|
 					.action_{|me|
 						f_updateTabV.value(tabView, i, tabView.activeTab, me.value);
 					}
-					.items_(q.drumPart.controls)
+					.items_(q.beatBox.controls)
 					.focusColor_(Color.clear)
 					.value_(control);
 			
@@ -190,10 +201,10 @@ f_drawTabV= {|tabView, numRows, control=0|
 };
 
 f_updateTabV= {|view, row, activeTab, control|
-	view.insert(activeTab, q.drumPart.controls[control] );
+	view.insert(activeTab, q.beatBox.controls[control] );
 	view.removeAt(activeTab + 1);
 	view.activeTab.postln;
-	q.drumPart.row1.controlRow= (q.drumPart.controls[control]: []);
+	q.beatBox.row[0].controlRow= (q.beatBox.controls[control]: []);
 	f_drawTabV.value(view, numControlRows, control);
 };
 
