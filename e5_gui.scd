@@ -38,26 +38,37 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var guiDisloser, numControlRows=2, guiPlus, guiMinus, tabV, f_drawTabV, f_updateTabV;
+var guiDisloser, numControlRows=1, guiPlus, guiMinus, tabV, f_drawTabV, f_updateTabV;
 
 q= ();
 q.beatBox= ();
 q.beatBox.instruments= ["kick", "snare", "hh", "er perc-1"];
 q.beatBox.controls= [ "probability", "volume", "pan", "attack", "decay", "lp cutoff",
 					"hp cutoff", "reverb", "delay", "bitcrush", "distortion" ];
-q.beatBox.numRows= 3;
-q.beatBox.row= [];
-//q.beatBox.row[0].instrument= 0;
-//q.beatBox.row[0].length= 16;
-//q.beatBox.row[0].beat= {2.rand} ! q.beatBox.row[0].length;
-//q.beatBox.row[0].controlRow= (unassigned: -1);
+q.beatBox.numRows= 1;
 
+//q.beatBox.row= Array.fill(q.beatBox.numRows, {|i|
+//	(
+//		'instrument': i,
+//		'length': 16,
+//		'beat': {2.rand} ! 16,
+//		'controlRow': [ (
+//			controlType: {q.beatBox.controls.size.rand},
+//			controlData: {1.0.rand} ! 16
+//		) ]
+//	)
+//});
+
+q.beatBox.row= [];
 q.beatBox.numRows.do{|i|
 	q.beatBox.row= q.beatBox.row.add(());
 	q.beatBox.row[i].instrument= i;
 	q.beatBox.row[i].length= 16;
 	q.beatBox.row[i].beat= {2.rand} ! q.beatBox.row[i].length;
-	q.beatBox.row[i].controlRow= (control: 0, data: 1.0 ! q.beatBox.row[i].length);
+	q.beatBox.row[i].controlRow= (
+		control: q.beatBox.controls.size.rand,
+		data: 1.0 ! q.beatBox.row[i].length
+	);
 };
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
@@ -142,7 +153,8 @@ f.decorator.nextLine.shift(22, 0);
 tabV= TabbedView.newFlat(
 	f,
 	f.bounds.width-30@48,
-	q.beatBox.row[0].controlRow.keys.asArray
+	[q.beatBox.controls[q.beatBox.row[0].controlRow.control]]
+//	q.beatBox.row[0].controlRow.keys.asArray
 )
 	.tabPosition_(\left)
 	.followEdges_(false)
