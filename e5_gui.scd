@@ -38,7 +38,7 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var guiDisloser, numControlRows=1, guiPlus, guiMinus, tabV, f_drawTabV, f_updateTabV;
+var comp, guiDisloser, numControlRows=1, guiPlus, guiMinus, tabV, f_drawTabV, f_updateTabV;
 
 q= ();
 q.beatBox= ();
@@ -47,62 +47,47 @@ q.beatBox.controls= [ "probability", "volume", "pan", "attack", "decay", "lp cut
 					"hp cutoff", "reverb", "delay", "bitcrush", "distortion" ];
 q.beatBox.numRows= 1;
 
-//q.beatBox.row= Array.fill(q.beatBox.numRows, {|i|
-//	(
-//		'instrument': i,
-//		'length': 16,
-//		'beat': {2.rand} ! 16,
-//		'controlRow': [ (
-//			controlType: {q.beatBox.controls.size.rand},
-//			controlData: {1.0.rand} ! 16
-//		) ]
-//	)
-//});
-
-q.beatBox.row= [];
-q.beatBox.numRows.do{|i|
-	q.beatBox.row= q.beatBox.row.add(());
-	q.beatBox.row[i].instrument= i;
-	q.beatBox.row[i].length= 16;
-	q.beatBox.row[i].beat= {2.rand} ! q.beatBox.row[i].length;
-	q.beatBox.row[i].controlRow= (
-		control: q.beatBox.controls.size.rand,
-		data: 1.0 ! q.beatBox.row[i].length
-	);
-};
+q.beatBox.row= Array.fill(q.beatBox.numRows, {|i|
+	(
+		instrument: i,
+		length: 16,
+		beat: {2.rand} ! 16,
+		controlRow: [ (
+			controlType: {q.beatBox.controls.size.rand},
+			controlData: {1.0.rand} ! 16
+		) ]
+	)
+});
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
-f= CompositeView(w, Rect(8, 8, 830, 32/*84*/), 4@4)
+comp= CompositeView(w, Rect(8, 8, 830, 32/*84*/), 4@4)
 	.background_(Color.blue.alpha_(0.2));
-f.addFlowLayout;
+comp.addFlowLayout;
 
-f.bounds.postln;
-
-guiDisloser= SmoothButton.new(f, 18@18)
+guiDisloser= SmoothButton.new(comp, 18@18)
 	.states_([
 		[ \triangle, Color.grey(0.1), Color.clear ],
 		[ \down, Color.grey(0.1), Color.clear ], ])
 	.action_{|me| if(me.value == 0, {
 			tabV.view.visible= false;
-			f.bounds_(Rect(8, 8, 830, 32));
+			comp.bounds_(Rect(8, 8, 830, 32));
 		},{
 			tabV.view.visible= true;
-			f.bounds_(Rect(8, 8, 830, 84));
+			comp.bounds_(Rect(8, 8, 830, 84));
 		});
 	}
 	.radius_(3)
 	.border_(0)
 	.focusColor_(Color.clear);
 
-PopUpMenu.new(f, 144@24)
+PopUpMenu.new(comp, 144@24)
 	.items_(q.beatBox.instruments)
-//	.items_(["kick", "snare", "hh", "er perc-1"])
 	.action_{|me| }
 	.focusColor_(Color.clear);
 
 16.do {|i|
-	SmoothButton.new(f, 24@24)
+	SmoothButton.new(comp, 24@24)
 		.states_([
 			[ \stop, Color.grey(0.1), Color.clear ],
 			[ \none, Color.grey(0.1), Color.clear ] ])
@@ -113,27 +98,27 @@ PopUpMenu.new(f, 144@24)
 };
 
 ["+", "-", "=", "!"].do {|item|
-	SmoothButton.new(f, 20@24)
+	SmoothButton.new(comp, 20@24)
 		.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me| }
 		.radius_(3)
 		.focusColor_(Color.clear);
 };
 
-guiPlus= SmoothButton.new(f, 24@24)
+guiPlus= SmoothButton.new(comp, 24@24)
 	.states_([ [ '+', Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 	.action_{|me| }
 	.radius_(3)
 	.focusColor_(Color.clear);
 
-guiMinus= SmoothButton.new(f, 24@24)
+guiMinus= SmoothButton.new(comp, 24@24)
 	.states_([ [ '-', Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 	.action_{|me| }
 	.radius_(3)
 	.focusColor_(Color.clear);
 guiMinus.enabled= false;
 
-SmoothButton.new(f, 24@24)
+SmoothButton.new(comp, 24@24)
 	.states_([
 		[ \i, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 	.action_{|me|
@@ -148,20 +133,19 @@ SmoothButton.new(f, 24@24)
 	.radius_(3)
 	.focusColor_(Color.clear);
 
-f.decorator.nextLine.shift(22, 0);
+comp.decorator.nextLine.shift(22, 0);
 
 tabV= TabbedView.newFlat(
-	f,
-	f.bounds.width-30@48,
-	[q.beatBox.controls[q.beatBox.row[0].controlRow.control]]
-//	q.beatBox.row[0].controlRow.keys.asArray
+	comp,
+	comp.bounds.width-30@48,
+	[q.beatBox.controls[q.beatBox.row[0].controlRow[0].controlType]]
 )
 	.tabPosition_(\left)
 	.followEdges_(false)
 	.tabWidth_(144);
 
 f_drawTabV= {|tabView, numRows, control=0|
-	if(numRows > 0, {
+	/*if(numRows > 0, {*/
 		tabView.views.do({|tab, i|
 			tab.flow({|v|
 				v.decorator.margin_(4@0);
@@ -207,20 +191,20 @@ f_drawTabV= {|tabView, numRows, control=0|
 						.focusColor_(Color.clear);
 				};
 		});})
-	},{
+	/*},{
 		tabView.view.visible= false;
-	});
+	})*/;
 };
 
 f_updateTabV= {|view, row, activeTab, control|
 	view.insert(activeTab, q.beatBox.controls[control] );
 	view.removeAt(activeTab + 1);
 	view.activeTab.postln;
-	q.beatBox.row[0].controlRow= (q.beatBox.controls[control]: []);
+	q.beatBox.row[0].controlRow[0]= (q.beatBox.controls[control]: []);
 	f_drawTabV.value(view, numControlRows, control);
 };
 
-f_drawTabV.value(tabV, numControlRows);
+f_drawTabV.value(tabV, numControlRows, q.beatBox.row[0].controlRow[0].controlType);
 tabV.view.visible= false;
 
 //tabV.labels.postln;
