@@ -354,3 +354,46 @@ guiLayout.decorator.nextLine;
 };
 
 )
+
+/******************************************************************************/
+
+(
+// A sequencer like in Loomer's Cumulus
+
+var numSteps=16, comp, stepSpec;
+
+stepSpec= [1, 32,'linear', 1, numSteps].asSpec;
+
+w= Window("", Rect(318, 456, 570, 260)).front;
+w.addFlowLayout;
+
+g= BoxGrid(w, Rect(0, 0, numSteps*16, 16), numSteps, 1) 
+	.setTrailDrag_(true, true);
+
+w.view.decorator.nextLine;
+
+comp= CompositeView(w, 56@90)
+	.background_(Color.grey.alpha_(0.3));
+comp.addFlowLayout;
+
+StaticText(comp, 48@16)
+	.string_("steps")
+	.align_(\center);
+
+// This should redraw and populate the BoxGrid
+Knob(comp, 48@42)
+	.action_{|me|
+		numSteps= stepSpec.map(me.value);
+		t.string_(numSteps);
+		w.view.decorator.reset;
+		g.remove;
+		g= BoxGrid(w, Rect(8, 8, numSteps*16, 16), columns: numSteps, rows: 1)
+			.setTrailDrag_(true, true);
+	}
+	.value_(stepSpec.unmap(numSteps););
+
+t= StaticText(comp, 48@16)
+	.string_(numSteps)
+	.align_(\center);
+
+)
