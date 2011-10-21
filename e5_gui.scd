@@ -360,17 +360,45 @@ guiLayout.decorator.nextLine;
 (
 // A sequencer like in Loomer's Cumulus
 
-var numSteps=16, comp, stepSpec;
+var numSteps=16, comp, stepSpec, colours, f_redrawGrid, grid;
 
 stepSpec= [1, 32,'linear', 1, numSteps].asSpec;
 
+grid= Array.fill(8);
+
+colours= [
+	Color.new255(225,87,54),
+	Color.new255(255, 138, 25),
+	Color.new255(227, 207, 52),
+	Color.new255(140, 186, 93),
+	Color.new255(76, 140, 203),
+	Color.new255(116, 105, 174),
+	Color.new255(180, 99, 167),
+	Color.new255(251, 251, 242),
+];
+
 w= Window("", Rect(318, 456, 570, 260)).front;
-w.addFlowLayout;
+w.addFlowLayout(gap: 4@0);
 
-g= BoxGrid(w, Rect(0, 0, numSteps*16, 16), numSteps, 1) 
-	.setTrailDrag_(true, true);
+8.do {|i|
+	StaticText(w, 16@16)
+		.string_(i+1)
+		.align_(\right)
+		.stringColor_(Color.grey(0.9));
 
-w.view.decorator.nextLine;
+	grid[i]= BoxGrid(w, Rect(0, 0, numSteps*16, 16), numSteps, 1) 
+		.setTrailDrag_(true, true)
+		.setFillColor_(colours[i])
+		.setNodeBorder_(0);
+
+//	grid[i]
+//		.setFillColor_(colours[i])
+//		.setNodeBorder_(0);
+	
+	w.view.decorator.nextLine.shift(0, -1);
+};
+
+w.view.decorator.nextLine.shift(20, 9);
 
 comp= CompositeView(w, 56@90)
 	.background_(Color.grey.alpha_(0.3));
@@ -385,15 +413,26 @@ Knob(comp, 48@42)
 	.action_{|me|
 		numSteps= stepSpec.map(me.value);
 		t.string_(numSteps);
-		w.view.decorator.reset;
-		g.remove;
-		g= BoxGrid(w, Rect(8, 8, numSteps*16, 16), columns: numSteps, rows: 1)
-			.setTrailDrag_(true, true);
+		grid[0].getNodeStates.postln;
+		f_redrawGrid.value;
 	}
 	.value_(stepSpec.unmap(numSteps););
 
 t= StaticText(comp, 48@16)
 	.string_(numSteps)
 	.align_(\center);
+
+f_redrawGrid= {
+	w.view.decorator.reset.shift(20, 0); // allow room for text
+	8.do{|i|
+		grid[i].remove;
+		grid[i]= BoxGrid(w, Rect(8, 8, numSteps*16, 16), columns: numSteps, rows: 1)
+			.setTrailDrag_(true, true)
+			.setFillColor_(colours[i])
+			.setNodeBorder_(0);
+
+		w.view.decorator.nextLine.shift(20, -1); // allow room for text
+	}
+};
 
 )
