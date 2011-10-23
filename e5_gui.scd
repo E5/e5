@@ -41,6 +41,9 @@ design here, without cluttering up my main file.
 var comp, guiDisloser, numControlRows=1, numRows= 2, guiPlus, guiMinus, tabV,
 	f_drawTabV, f_updateTabV;
 
+comp= Array.fill(numRows);
+tabV= Array.fill(numRows);
+
 q= ();
 
 q.beatBox= (); // holds all beatBox data
@@ -68,33 +71,33 @@ q.beatBox.row= Array.fill(numRows, {|i| // array holding each beatBox row
 w= Window.new("", Rect(318, 662, 856, 194)).front;
 
 numRows.do {|i|
-	comp= CompositeView(w, Rect(8, /*8*/ 8+(i*32), 830, 32), 4@4)
+	comp[i]= CompositeView(w, Rect(8, /*8*/ 8+(i*32), 830, 32), 4@4)
 		.background_(Color.rand.alpha_(0.2));
-	comp.addFlowLayout;
+	comp[i].addFlowLayout;
 	
-	guiDisloser= SmoothButton.new(comp, 18@18)
+	guiDisloser= SmoothButton.new(comp[i], 18@18)
 		.states_([
 			[ \triangle, Color.grey(0.1), Color.clear ],
 			[ \down, Color.grey(0.1), Color.clear ], ])
 		.action_{|me| if(me.value == 0, {
-				tabV.view.visible= false;
-				comp.bounds_(Rect(8, 8, 830, 32));
+				tabV[i].view.visible= false;
+				comp[i].bounds_(Rect(8, 8, 830, 32));
 			},{
-				tabV.view.visible= true;
-				comp.bounds_(Rect(8, 8, 830, 84));
+				tabV[i].view.visible= true;
+				comp[i].bounds_(Rect(8, 8, 830, 84));
 			});
 		}
 		.radius_(3)
 		.border_(0)
 		.focusColor_(Color.clear);
 	
-	PopUpMenu.new(comp, 144@24)
+	PopUpMenu.new(comp[i], 144@24)
 		.items_(q.beatBox.instruments)
 		.action_{|me| }
 		.focusColor_(Color.clear);
 	
 	16.do {|j|
-		SmoothButton.new(comp, 24@24)
+		SmoothButton.new(comp[i], 24@24)
 			.states_([
 				[ \stop, Color.grey(0.1), Color.clear ],
 				[ \none, Color.grey(0.1), Color.clear ] ])
@@ -105,27 +108,27 @@ numRows.do {|i|
 	};
 	
 	["+", "-", "=", "!"].do {|item|
-		SmoothButton.new(comp, 20@24)
+		SmoothButton.new(comp[i], 20@24)
 			.states_([ [ item, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 			.action_{|me| }
 			.radius_(3)
 			.focusColor_(Color.clear);
 	};
 	
-	guiPlus= SmoothButton.new(comp, 24@24)
+	guiPlus= SmoothButton.new(comp[i], 24@24)
 		.states_([ [ '+', Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me| }
 		.radius_(3)
 		.focusColor_(Color.clear);
 	
-	guiMinus= SmoothButton.new(comp, 24@24)
+	guiMinus= SmoothButton.new(comp[i], 24@24)
 		.states_([ [ '-', Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me| }
 		.radius_(3)
 		.focusColor_(Color.clear);
 	guiMinus.enabled= false;
 	
-	SmoothButton.new(comp, 24@24)
+	SmoothButton.new(comp[i], 24@24)
 		.states_([
 			[ \i, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me|
@@ -140,11 +143,11 @@ numRows.do {|i|
 		.radius_(3)
 		.focusColor_(Color.clear);
 	
-	comp.decorator.nextLine.shift(22, 0);
+	comp[i].decorator.nextLine.shift(22, 0);
 	
-	tabV= TabbedView.newFlat(
-		comp,
-		comp.bounds.width-30@48,
+	tabV[i]= TabbedView.newFlat(
+		comp[i],
+		comp[i].bounds.width-30@48,
 		[q.beatBox.controls[q.beatBox.row[0].controlRow[0].controlType]]
 	)
 	.tabPosition_(\left)
@@ -209,8 +212,10 @@ f_updateTabV= {|view, row, activeTab, control|
 	f_drawTabV.value(view, numControlRows, control);
 };
 
-f_drawTabV.value(tabV, numControlRows, q.beatBox.row[0].controlRow[0].controlType);
-tabV.view.visible= false;
+numRows.do {|i|
+	f_drawTabV.value(tabV[i], numControlRows, q.beatBox.row[0].controlRow[0].controlType);
+	tabV[i].view.visible= false;
+};
 
 //tabV.labels.postln;
 //a.keys.asArray[0]
