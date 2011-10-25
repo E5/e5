@@ -2,7 +2,7 @@
 
 E5 GUI
 
-This is a temporary file for designing the E5 module GUIs. I'll experiment and
+This is a file for designing the E5 module GUIs. I'll experiment and
 design here, without cluttering up my main file.
 
 *******************************************************************************/
@@ -38,7 +38,7 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var comp, guiDisloser, numControlRows=1, numRows= 2, guiPlus, guiMinus, tabV,
+var comp, guiDisloser, numControlRows=1, numRows=1, guiPlus, guiMinus, tabV,
 	f_drawTabV, f_updateTabV;
 
 comp= Array.fill(numRows);
@@ -69,10 +69,11 @@ q.beatBox.row= Array.fill(numRows, {|i| // array holding each beatBox row
 });
 
 w= Window.new("", Rect(318, 662, 856, 194)).front;
+//w.view.addFlowLayout;
 
 numRows.do {|i|
-	comp[i]= CompositeView(w, Rect(8, /*8*/ 8+(i*32), 830, 32), 4@4)
-		.background_(Color.rand.alpha_(0.2));
+	comp[i]= CompositeView(w, Rect(8, 8+(i*4)+(i*32), 830, 32), 4@4)
+		.background_(Color.grey/*.rand.alpha_(0.2)*/);
 	comp[i].addFlowLayout;
 	
 	guiDisloser= SmoothButton.new(comp[i], 18@18)
@@ -221,3 +222,26 @@ numRows.do {|i|
 //a.keys.asArray[0]
 
 )
+
+/*******************************************************************************
+
+row 1 closed:		.bounds_(Rect(8, 8, 830, 32));
+row 1 disclosed:	.bounds_(Rect(8, 8, 830, 84));
+
+if row 1 closed,
+	row 2 closed:		.bounds_(Rect(8, 8, 830, 44));
+	row 2 disclosed:	.bounds_(Rect(8, 8, 830, 96));
+
+rowState= Array.fill(numRows, {0}); // 0: closed, 1: open
+
+or
+
+var addToY;
+
+rowDisclosed= Array.fill(numRows, {false}); // false: closed, true: open
+
+rowDisclosed.do {|item, i|
+	if (item, {addToY= addToY+52})
+};
+
+*******************************************************************************/
