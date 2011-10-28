@@ -38,8 +38,8 @@ design here, without cluttering up my main file.
 (
 // Designing a drum machine gui
 
-var comp, guiDisloser, numControlRows=1, numRows=1, guiPlus, guiMinus, tabV,
-	f_drawTabV, f_updateTabV;
+var comp, guiDisloser, numControlRows=1, numRows=4, guiPlus, guiMinus, tabV,
+	f_drawTabV, f_updateTabV, guiFlow;
 
 comp= Array.fill(numRows);
 tabV= Array.fill(numRows);
@@ -68,11 +68,13 @@ q.beatBox.row= Array.fill(numRows, {|i| // array holding each beatBox row
 	)
 });
 
-w= Window.new("", Rect(318, 662, 856, 194)).front;
-//w.view.addFlowLayout;
+w= Window.new("", Rect(318, 492, 855, 376)).front;
+
+guiFlow= FlowView.new(w, Rect(0, 0, w.bounds.width, w.bounds.height), margin: 8@8, gap: 8@8)
+	/*.background_(Color.yellow)*/;
 
 numRows.do {|i|
-	comp[i]= CompositeView(w, Rect(8, 8+(i*4)+(i*32), 830, 32), 4@4)
+	comp[i]= CompositeView(guiFlow, Rect(8, 8+(i*4)+(i*32), 840, 32), 4@4)
 		.background_(Color.grey/*.rand.alpha_(0.2)*/);
 	comp[i].addFlowLayout;
 	
@@ -82,10 +84,16 @@ numRows.do {|i|
 			[ \down, Color.grey(0.1), Color.clear ], ])
 		.action_{|me| if(me.value == 0, {
 				tabV[i].view.visible= false;
-				comp[i].bounds_(Rect(8, 8, 830, 32));
+				comp[i].bounds_(Rect(8, 8, 840, 32));
+				guiFlow.resizeToFit(true, true);
+//				w.bounds_(Rect(w.bounds.left, w.bounds.top, 855, w.bounds.height + 100));
+//				w.refresh;
 			},{
 				tabV[i].view.visible= true;
-				comp[i].bounds_(Rect(8, 8, 830, 84));
+				comp[i].bounds_(Rect(8, 8, 840, 84));
+				guiFlow.resizeToFit(true, true);
+//				w.bounds_(Rect(w.bounds.left, w.bounds.top, 855, w.bounds.height - 100));
+//				w.refresh;
 			});
 		}
 		.radius_(3)
@@ -156,6 +164,9 @@ numRows.do {|i|
 	.tabWidth_(144);
 };
 
+guiFlow.resizeToFit(true, true);
+
+
 f_drawTabV= {|tabView, numRows, control=0|
 	tabView.views.do({|tab, i|
 		tab.flow({|v|
@@ -218,30 +229,12 @@ numRows.do {|i|
 	tabV[i].view.visible= false;
 };
 
-//tabV.labels.postln;
-//a.keys.asArray[0]
-
 )
 
 /*******************************************************************************
 
-row 1 closed:		.bounds_(Rect(8, 8, 830, 32));
-row 1 disclosed:	.bounds_(Rect(8, 8, 830, 84));
+//tabV.labels.postln;
+//a.keys.asArray[0]
 
-if row 1 closed,
-	row 2 closed:		.bounds_(Rect(8, 8, 830, 44));
-	row 2 disclosed:	.bounds_(Rect(8, 8, 830, 96));
-
-rowState= Array.fill(numRows, {0}); // 0: closed, 1: open
-
-or
-
-var addToY;
-
-rowDisclosed= Array.fill(numRows, {false}); // false: closed, true: open
-
-rowDisclosed.do {|item, i|
-	if (item, {addToY= addToY+52})
-};
 
 *******************************************************************************/
