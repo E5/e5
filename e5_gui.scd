@@ -146,7 +146,8 @@ numRows.do {|i|
 	PopUpMenu.new(comp[i], 144@24)
 		.items_(q.beatBox.instruments)
 		.action_{|me| }
-		.focusColor_(Color.clear);
+		.focusColor_(Color.clear)
+		.value_(i);
 	
 	16.do {|j|
 		SmoothButton.new(comp[i], 24@24)
