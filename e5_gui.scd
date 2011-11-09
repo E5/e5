@@ -20,7 +20,7 @@ design here, without cluttering up my main file.
 
 // Data
 
-var comp, guiDisloser, numControlRows=1, numRows=1, numSteps=16, guiPlus,
+var comp, guiDisloser, numControlRows=1, numRows=3, numSteps=16, guiPlus,
 	guiMinus, tabV, f_drawTabV, f_updateTabV, guiFlow;
 
 q= ();
@@ -106,13 +106,13 @@ f_drawTabV= {|tabNum/*, numRows, control=0*/|
 comp= Array.fill(numRows);
 tabV= Array.fill(numRows);
 
-w= Window.new("", Rect(5, 471, 855, 376)).front;
+w= Window.new("", Rect(5, 471, 805, 376)).front;
 
 guiFlow= FlowView.new(w, Rect(0, 0, w.bounds.width, w.bounds.height),
 	margin: 8@8, gap: 8@8);
 
 numRows.do {|i|
-	comp[i]= CompositeView(guiFlow, Rect(8, 8+(i*4)+(i*32), 840, 32), 4@4)
+	comp[i]= CompositeView(guiFlow, Rect(8, 8+(i*4)+(i*32), 790, 32), 4@4)
 		.background_(Color.grey);
 	comp[i].addFlowLayout;
 	
@@ -151,7 +151,7 @@ numRows.do {|i|
 			.value_(2.rand);
 	};
 	
-	SmoothButton.new(comp[i], 24@24)
+	SmoothButton.new(comp[i], 24@24) // info button
 		.states_([
 			[ \i, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me|
@@ -162,6 +162,16 @@ numRows.do {|i|
 				])
 				.onClose_({"Dismissed!".postln})
 				.action_({ x.close });
+		}
+		.radius_(3)
+		.focusColor_(Color.clear);
+	
+	SmoothButton.new(comp[i], 24@24) // rand button
+		.states_([
+			[ \star, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		.action_{|me|
+			q.beatBox.row[i].beat= {2.rand} ! numSteps;
+			/*must refresh gui here*/
 		}
 		.radius_(3)
 		.focusColor_(Color.clear);
