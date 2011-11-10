@@ -112,7 +112,8 @@ guiFlow= FlowView.new(w, Rect(0, 0, w.bounds.width, w.bounds.height),
 	margin: 8@8, gap: 8@8);
 
 numRows.do {|i|
-	var drumInfo, randTrig, trigLeft, trigRight, drumTrig= Array.fill(numSteps);
+	var drumInfo, randTrig, trigLeft, trigRight, trigMax, trigMin,
+		drumTrig= Array.fill(numSteps);
 	
 	comp[i]= CompositeView(guiFlow, Rect(8, 8+(i*4)+(i*32), 790, 32), 4@4)
 		.background_(Color.grey);
@@ -160,8 +161,8 @@ numRows.do {|i|
 	numSteps.do {|j|
 		drumTrig[j]= SmoothButton.new(comp[i], 24@24)
 			.states_([
-				[ \stop, Color.grey(0.1), Color.white.alpha_(0.5) ],
-				[ \none, Color.grey(0.1), Color.white.alpha_(0.5) ] ])
+				[ \none, Color.grey(0.1), Color.white.alpha_(0.5) ],
+				[ \stop, Color.grey(0.1), Color.white.alpha_(0.5) ] ])
 			.action_{|me| }
 			.radius_(8)
 			.focusColor_(Color.clear)
@@ -197,6 +198,30 @@ numRows.do {|i|
 			[ \play, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= q.beatBox.row[i].beat.rotate(1);
+			drumTrig.do{|item, j|
+				item.value_(q.beatBox.row[i].beat[j]);
+			};
+		}
+		.radius_(3)
+		.focusColor_(Color.clear);
+	
+	trigMax= SmoothButton.new(comp[i], 24@24) // shift right button
+		.states_([
+			[ \up, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		.action_{|me|
+			q.beatBox.row[i].beat= 1 ! numSteps;
+			drumTrig.do{|item, j|
+				item.value_(q.beatBox.row[i].beat[j]);
+			};
+		}
+		.radius_(3)
+		.focusColor_(Color.clear);
+	
+	trigMin= SmoothButton.new(comp[i], 24@24) // shift right button
+		.states_([
+			[ \down, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		.action_{|me|
+			q.beatBox.row[i].beat= 0 ! numSteps;
 			drumTrig.do{|item, j|
 				item.value_(q.beatBox.row[i].beat[j]);
 			};
