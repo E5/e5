@@ -173,13 +173,9 @@ numRows.do {|i|
 			[ \star, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= {2.rand} ! numSteps;
-			/*must refresh gui here*/
 			drumTrig.do{|item, j|
-				/*item*/drumTrig[j].value(q.beatBox.row[i].beat[j]);
-				/*item*/drumTrig[j].refresh;
+				item.value_(q.beatBox.row[i].beat[j]);
 			};
-			q.beatBox.row[i].beat.postln;
-			"Beat randomised".postln;
 		}
 		.radius_(3)
 		.focusColor_(Color.clear);
