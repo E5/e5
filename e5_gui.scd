@@ -112,6 +112,8 @@ guiFlow= FlowView.new(w, Rect(0, 0, w.bounds.width, w.bounds.height),
 	margin: 8@8, gap: 8@8);
 
 numRows.do {|i|
+	var drumInfo, randTrig, trigLeft, trigRight, drumTrig= Array.fill(numSteps);
+	
 	comp[i]= CompositeView(guiFlow, Rect(8, 8+(i*4)+(i*32), 790, 32), 4@4)
 		.background_(Color.grey);
 	comp[i].addFlowLayout;
@@ -140,18 +142,7 @@ numRows.do {|i|
 		.focusColor_(Color.clear)
 		.value_(i);
 	
-	16.do {|j|
-		SmoothButton.new(comp[i], 24@24)
-			.states_([
-				[ \stop, Color.grey(0.1), Color.white.alpha_(0.5) ],
-				[ \none, Color.grey(0.1), Color.white.alpha_(0.5) ] ])
-			.action_{|me| }
-			.radius_(8)
-			.focusColor_(Color.clear)
-			.value_(2.rand);
-	};
-	
-	SmoothButton.new(comp[i], 24@24) // info button
+	drumInfo= SmoothButton.new(comp[i], 24@24) // info button
 		.states_([
 			[ \i, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me|
@@ -166,12 +157,29 @@ numRows.do {|i|
 		.radius_(3)
 		.focusColor_(Color.clear);
 	
-	SmoothButton.new(comp[i], 24@24) // rand button
+	numSteps.do {|j|
+		drumTrig[j]= SmoothButton.new(comp[i], 24@24)
+			.states_([
+				[ \stop, Color.grey(0.1), Color.white.alpha_(0.5) ],
+				[ \none, Color.grey(0.1), Color.white.alpha_(0.5) ] ])
+			.action_{|me| }
+			.radius_(8)
+			.focusColor_(Color.clear)
+			.value_(q.beatBox.row[i].beat[j]);
+	};
+	
+	randTrig= SmoothButton.new(comp[i], 24@24) // rand button
 		.states_([
 			[ \star, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= {2.rand} ! numSteps;
 			/*must refresh gui here*/
+			drumTrig.do{|item, j|
+				/*item*/drumTrig[j].value(q.beatBox.row[i].beat[j]);
+				/*item*/drumTrig[j].refresh;
+			};
+			q.beatBox.row[i].beat.postln;
+			"Beat randomised".postln;
 		}
 		.radius_(3)
 		.focusColor_(Color.clear);
