@@ -51,7 +51,8 @@ q.beatBox.row= Array.fill(numRows, {|i| // array holding each beatBox row
 			0.0 ! numSteps, // delay
 			0.0 ! numSteps, // bitcrush
 			0.0 ! numSteps, // distortion
-		]
+		],
+		currentTab: 0
 	)
 });
 
@@ -171,9 +172,11 @@ numRows.do {|i|
 		.action_{|me| if(me.value == 0, {
 				tabV[i].view.visible= false;
 				comp[i].bounds_(Rect(8, 8, 834, 32));
+				tabV[i].focus(q.beatBox.row[i].currentTab);
 			},{
 				tabV[i].view.visible= true;
 				comp[i].bounds_(Rect(8, 8, 834, 84));
+				tabV[i].focus(q.beatBox.row[i].currentTab);
 			});
 			guiFlow.resizeToFit(true, true);
 		}
@@ -286,6 +289,12 @@ numRows.do {|i|
 	f_drawTabV.value(i);
 
 	tabV[i].view.visible= false;
+
+//	tabV[i].focusActions_(
+//		Array.fill(q.beatBox.controls.size, {|j| q.beatBox.row[i].currentTab= j; q.beatBox.row[i].postln})
+//	);
+	
+//	tabV[i].focus(0);
 };
 
 guiFlow.resizeToFit(true, true);
