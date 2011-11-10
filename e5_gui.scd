@@ -180,6 +180,30 @@ numRows.do {|i|
 		.radius_(3)
 		.focusColor_(Color.clear);
 	
+	trigLeft= SmoothButton.new(comp[i], 24@24) // shift left button
+		.states_([
+			[ \back, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		.action_{|me|
+			q.beatBox.row[i].beat= q.beatBox.row[i].beat.rotate(-1);
+			drumTrig.do{|item, j|
+				item.value_(q.beatBox.row[i].beat[j]);
+			};
+		}
+		.radius_(3)
+		.focusColor_(Color.clear);
+	
+	trigRight= SmoothButton.new(comp[i], 24@24) // shift right button
+		.states_([
+			[ \play, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+		.action_{|me|
+			q.beatBox.row[i].beat= q.beatBox.row[i].beat.rotate(1);
+			drumTrig.do{|item, j|
+				item.value_(q.beatBox.row[i].beat[j]);
+			};
+		}
+		.radius_(3)
+		.focusColor_(Color.clear);
+	
 	comp[i].decorator.nextLine.shift(22, 0);
 	
 	tabV[i]= TabbedView.newFlat(
