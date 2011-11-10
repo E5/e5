@@ -87,13 +87,17 @@ f_drawTabV= {|tabNum|
 
 			controlSlider= MultiSliderView(thisTab, 444@24)
 				.value_(q.beatBox.row[tabNum].controlValue[i])
-				.action_{|me| }
+				.action_{|me|
+					q.beatBox.row[tabNum].controlValue[i]= me.value;
+				}
 				.focusColor_(Color.clear)
 				.elasticMode_(1)
 				.indexThumbSize_(32)
 				.thumbSize_(34)
 				.valueThumbSize_(2);
 		
+			thisTab.decorator.shift(24, 0);
+
 			cntlRand= SmoothButton.new(thisTab, 20@20) // rand button
 				.states_([
 					[ \star, Color.grey(0.1), Color.clear ] ])
