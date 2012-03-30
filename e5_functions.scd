@@ -81,6 +81,8 @@ This file contains most of the functions used by E5.
 //	seq
 };
 
+/******************************************************************************/
+
 ~f_macroMenu= {|layout, seq|
 	// this function draws a macro popup menu
 	var workSeq= seq.copy;
@@ -112,6 +114,8 @@ This file contains most of the functions used by E5.
 //	seq
 };
 
+/******************************************************************************/
+
 ~f_Macros= {|seq, select=0|
 	var macro, workSeq= seq.copy;
 	macro= [
@@ -131,6 +135,8 @@ This file contains most of the functions used by E5.
 	workSeq= macro[select][1].value;
 	workSeq
 };
+
+/******************************************************************************/
 
 //~f_knobRow= {|view, seq, spec|
 //	// this function draws a row of knobs

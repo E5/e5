@@ -68,19 +68,21 @@ f_drawTabV= {|tabNum|
 
 			thisTab.decorator.margin= 4@4; // not working
 
-			SmoothButton(thisTab, 20@20)
+			Button(thisTab, 20@20)
 				.states_([
-					[ \i, Color.grey(0.1), Color.clear ] ])
+					[ "i" ] ])
 				.action_{|me|
-					x= SCModalSheet.new(w, 380@70);
-					Button(x, Rect(20,20,340,30))
-						.states_([
-							["Dismiss me", Color.black, Color.red]
-						])
-						.onClose_({"Dismissed!".postln})
-						.action_({ x.close });
+					v= View(bounds:300@300);
+					Button(v, Rect(20, 20, 100, 30)).states_([["yes"],["no"]]);
+					v.front;
+//					x= SCModalSheet.new(w, 380@70);
+//					Button(x, Rect(20,20,340,30))
+//						.states_([
+//							["Dismiss me", Color.black, Color.red]
+//						])
+//						.onClose_({"Dismissed!".postln})
+//						.action_({ x.close });
 				}
-				.radius_(3)
 				.focusColor_(Color.clear);
 		
 			thisTab.decorator.shift(172, 0);
@@ -98,52 +100,47 @@ f_drawTabV= {|tabNum|
 		
 			thisTab.decorator.shift(24, 0);
 
-			cntlRand= SmoothButton.new(thisTab, 20@20) // rand button
+			cntlRand= Button.new(thisTab, 20@20) // rand button
 				.states_([
-					[ \star, Color.grey(0.1), Color.clear ] ])
+					[ "?" ] ])
 				.action_{|me|
 					q.beatBox.row[tabNum].controlValue[i]= {1.0.rand} ! numSteps;
 					controlSlider.value_(q.beatBox.row[tabNum].controlValue[i])
-				}
-				.focusColor_(Color.clear);
+				};
 			
-			cntlLeft= SmoothButton.new(thisTab, 20@20) // shift left button
+			cntlLeft= Button.new(thisTab, 20@20) // shift left button
 				.states_([
-					[ \back, Color.grey(0.1), Color.clear ] ])
+					[ "<" ] ])
 				.action_{|me|
 					q.beatBox.row[tabNum].controlValue[i]
 						= q.beatBox.row[tabNum].controlValue[i].rotate(-1);
 					controlSlider.value_(q.beatBox.row[tabNum].controlValue[i])
-				}
-				.focusColor_(Color.clear);
+				};
 			
-			cntlRight= SmoothButton.new(thisTab, 20@20) // shift right button
+			cntlRight= Button.new(thisTab, 20@20) // shift right button
 				.states_([
-					[ \play, Color.grey(0.1), Color.clear ] ])
+					[ ">" ] ])
 				.action_{|me|
 					q.beatBox.row[tabNum].controlValue[i]
 						= q.beatBox.row[tabNum].controlValue[i].rotate(1);
 					controlSlider.value_(q.beatBox.row[tabNum].controlValue[i])
-				}
-				.focusColor_(Color.clear);
+				};
 			
-			cntlMax= SmoothButton.new(thisTab, 20@20) // all on button
+			cntlMax= Button.new(thisTab, 20@20) // all on button
 				.states_([
-					[ \up, Color.grey(0.1), Color.clear ] ])
+					[ "^" ] ])
 				.action_{|me|
 					q.beatBox.row[tabNum].controlValue[i]= 1.0 ! numSteps;
 					controlSlider.value_(q.beatBox.row[tabNum].controlValue[i])
-				}
-				.focusColor_(Color.clear);
+				};
 			
-			cntlMin= SmoothButton.new(thisTab, 20@20) // all off button
+			cntlMin= Button.new(thisTab, 20@20) // all off button
 				.states_([
-					[ \down, Color.grey(0.1), Color.clear ] ])
+					[ "_" ] ])
 				.action_{|me|
 					q.beatBox.row[tabNum].controlValue[i]= 0 ! numSteps;
 					controlSlider.value_(q.beatBox.row[tabNum].controlValue[i])
-				}
-				.focusColor_(Color.clear);
+				};
 
 		});
 	});
@@ -166,13 +163,13 @@ numRows.do {|i|
 		drumTrig= Array.fill(numSteps);
 	
 	comp[i]= CompositeView(guiFlow, Rect(8, 8+(i*4)+(i*32), 834, 32), 4@4)
-		.background_(Color.grey);
+		.background_(Color.rand);
 	comp[i].addFlowLayout;
 	
-	guiDisloser= SmoothButton.new(comp[i], 18@18)
+	guiDisloser= Button.new(comp[i], 18@18)
 		.states_([
-			[ \triangle, Color.grey(0.1), Color.clear ],
-			[ \down, Color.grey(0.1), Color.clear ], ])
+			[">" ],
+			[ "<" ], ])
 		.action_{|me| if(me.value == 0, {
 				tabV[i].view.visible= false;
 				comp[i].bounds_(Rect(8, 8, 834, 32));
@@ -183,101 +180,92 @@ numRows.do {|i|
 				tabV[i].focus(q.beatBox.row[i].currentTab);
 			});
 			guiFlow.resizeToFit(true, true);
-		}
-		.radius_(3)
-		.border_(0)
-		.focusColor_(Color.clear);
+		};
 	
 	PopUpMenu.new(comp[i], 144@24)
 		.items_(q.beatBox.instruments)
 		.action_{|me| }
-		.focusColor_(Color.clear)
 		.value_(i);
 	
-	drumInfo= SmoothButton.new(comp[i], 24@24) // info button
-		.states_([
-			[ \i, Color.grey(0.1), Color.clear ] ])
+	drumInfo= Button.new(comp[i], 24@24) // info button
+		.states_([ [ "i" ] ])
 		.action_{|me|
-			x= SCModalSheet.new(w, 380@70);
-			Button(x, Rect(20,20,340,30))
-				.states_([
-					["Dismiss me", Color.black, Color.red]
-				])
-				.onClose_({"Dismissed!".postln})
-				.action_({ x.close });
-		}
-		.radius_(3)
-		.focusColor_(Color.clear);
+			v= View(bounds:300@300);
+			Button(v, Rect(20, 20, 100, 30)).states_([["yes"],["no"]]);
+			v.front;
+
+//			x = Button().front;
+//			x= SCModalSheet.new(w, 380@70);
+//			Button(x, Rect(20,20,340,30))
+//				.states_([
+//					["Dismiss me", Color.black, Color.red]
+//				])
+//				.onClose_({"Dismissed!".postln})
+//				.action_({ x.close });
+		};
 	
 	comp[i].decorator.shift(22, 0);
 	
 	numSteps.do {|j|
-		drumTrig[j]= SmoothButton.new(comp[i], 24@24)
+		drumTrig[j]= Button.new(comp[i], 24@24)
 			.states_([
-				[ \none, Color.grey(0.1), Color.white.alpha_(0.67) ],
-				[ \stop, Color.grey(0.1), Color.white.alpha_(0.67) ] ])
+				[ "" ],
+				[ "*" ] ])
 			.action_{|me| }
-			.radius_(8)
-			.focusColor_(Color.clear)
 			.value_(q.beatBox.row[i].beat[j]);
 	};
 	
 	comp[i].decorator.shift(22, 0);
 	
-	randTrig= SmoothButton.new(comp[i], 24@24) // rand button
+	randTrig= Button.new(comp[i], 24@24) // rand button
 		.states_([
-			[ \star, Color.grey(0.1), Color.clear ] ])
+			[ "?" ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= {2.rand} ! numSteps;
 			drumTrig.do{|item, j|
 				item.value_(q.beatBox.row[i].beat[j]);
 			};
-		}
-		.focusColor_(Color.clear);
+		};
 	
-	trigLeft= SmoothButton.new(comp[i], 24@24) // shift left button
+	trigLeft= Button.new(comp[i], 24@24) // shift left button
 		.states_([
-			[ \back, Color.grey(0.1), Color.clear ] ])
+			[ "<" ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= q.beatBox.row[i].beat.rotate(-1);
 			drumTrig.do{|item, j|
 				item.value_(q.beatBox.row[i].beat[j]);
 			};
-		}
-		.focusColor_(Color.clear);
+		};
 	
-	trigRight= SmoothButton.new(comp[i], 24@24) // shift right button
+	trigRight= Button.new(comp[i], 24@24) // shift right button
 		.states_([
-			[ \play, Color.grey(0.1), Color.clear ] ])
+			[ ">" ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= q.beatBox.row[i].beat.rotate(1);
 			drumTrig.do{|item, j|
 				item.value_(q.beatBox.row[i].beat[j]);
 			};
-		}
-		.focusColor_(Color.clear);
+		};
 	
-	trigMax= SmoothButton.new(comp[i], 24@24) // all on button
+	trigMax= Button.new(comp[i], 24@24) // all on button
 		.states_([
-			[ \up, Color.grey(0.1), Color.clear ] ])
+			[ "^" ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= 1 ! numSteps;
 			drumTrig.do{|item, j|
 				item.value_(q.beatBox.row[i].beat[j]);
 			};
-		}
-		.focusColor_(Color.clear);
+		};
 	
-	trigMin= SmoothButton.new(comp[i], 24@24) // all off button
+	trigMin= Button.new(comp[i], 24@24) // all off button
 		.states_([
-			[ \down, Color.grey(0.1), Color.clear ] ])
+			[ "_" ] ])
 		.action_{|me|
 			q.beatBox.row[i].beat= 0 ! numSteps;
 			drumTrig.do{|item, j|
 				item.value_(q.beatBox.row[i].beat[j]);
 			};
-		}
-		.focusColor_(Color.clear);
+		};
 	
 	comp[i].decorator.nextLine.shift(22, 0);
 	
@@ -288,17 +276,12 @@ numRows.do {|i|
 	)
 	.tabPosition_(\bottom)
 	.tabWidth_(\auto)
-	.font_(Font("MINI7Tight", 7));
+	.font_(Font("MINI 7 Tight", 7));
 
 	f_drawTabV.value(i);
 
 	tabV[i].view.visible= false;
 
-//	tabV[i].focusActions_(
-//		Array.fill(q.beatBox.controls.size, {|j| q.beatBox.row[i].currentTab= j; q.beatBox.row[i].postln})
-//	);
-	
-//	tabV[i].focus(0);
 };
 
 guiFlow.resizeToFit(true, true);
