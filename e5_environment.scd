@@ -35,24 +35,21 @@ SynthDescLib.global.synthDescs.keys.asArray.sort.do{|item, i|
 
 /******************************************************************************/
 
-// arrange windows
-~f_placeWindow.value(Document.listener, Document.current);
-
-/******************************************************************************/
-
 (
 // gui stuff
 var dec, guiComp, guiBpm, guiKey, guiScale, guiPlay;
 
+GUI.qt; // Use a QT gui
+//GUI.cocoa; // Use a cocoa gui
+
 // Inspector window
 w= Window.new("", Rect(0, 296, 925, 560), false/*, false*/).front;
-//w.background_(Color.grey(0.1).alpha_(0.9));
 
 dec= w.addFlowLayout;
 
 guiComp= Array.fill(2);
 
-guiBpm= EZSmoothSlider(w,
+guiBpm= EZSlider(w,
 	300@20,
 	"bpm:".padR,
 	[10, 500, \lin, 1],
@@ -83,10 +80,10 @@ ScaleInfo.scales.keys.asArray.sort.do{|item, i|
 guiScale.value= 82;
 
 // Save button
-SmoothButton(w, 40@20)
+Button(w, 40@20)
 	.states_([[ "save", Color.grey(0.95), Color.black.alpha_(0.25) ]] )
 	.action_({
-		CocoaDialog.savePanel({|path|
+		Dialog.savePanel({|path|
 			var tmp;
 			path.postln;
 			tmp= ZArchive.write(path);
@@ -96,15 +93,13 @@ SmoothButton(w, 40@20)
 			"save cancelled".postln;
 		});
 	})
-	.canFocus_(false)
-	.border_(1)
-	.radius_(1);
+	.canFocus_(false);
 
 // Load button
-SmoothButton(w, 40@20)
+Button(w, 40@20)
 	.states_([[ "load", Color.grey(0.95), Color.black.alpha_(0.25) ]] )
 	.action_({
-		CocoaDialog.getPaths({|paths|
+		Dialog.getPaths({|paths|
 			var tmp;
 			tmp= ZArchive.read(paths[0]);
 			~data= tmp.readItem;
@@ -118,33 +113,28 @@ SmoothButton(w, 40@20)
 			false // allow multiple
 		);
 	})
-	.canFocus_(false)
-	.border_(1)
-	.radius_(1);
+	.canFocus_(false);
 
 dec.shift(20, 0);
 
 // Window positioning button
-SmoothButton(w, 50@20)
+Button(w, 50@20)
 	.states_([[ "tidy up" ]] )
 	.action_({
 		~f_placeWindow.value(Document.listener, Document.current, w);
 	})
 	.canFocus_(false)
-	.border_(1)
-	.radius_(1);
+	.enabled_(false);
 
 dec.nextLine;
 
 // Play button
-guiPlay= SmoothButton(w, 100@30)
+guiPlay= Button(w, 100@30)
 	.states_([
 		[ \play, Color.black, Color.green ],
 		[ \stop, Color.black, Color.clear ] ] )
 	.action_({
 	})
-//	.border_(1)
-	.radius_(0)
 	.canFocus_(false);
 
 dec.nextLine;
